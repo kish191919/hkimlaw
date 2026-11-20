@@ -58,6 +58,8 @@
   --callout-bg: #FBF5EA;
   --mnav-bg: var(--navy-900);
   --mnav-fg: #FFFFFF;
+  --mnav-accent: var(--gold-300);
+  --mnav-scrim: rgba(4, 10, 22, .6);
   --footer-line: rgba(255, 255, 255, .14);
 }
 

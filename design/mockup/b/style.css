@@ -67,6 +67,8 @@
   --callout-bg: #FBEFE7;
   --mnav-bg: var(--cream);
   --mnav-fg: var(--green-900);
+  --mnav-accent: var(--accent-text);
+  --mnav-scrim: rgba(15, 36, 31, .5);
   --footer-line: rgba(255, 255, 255, .16);
 }
 

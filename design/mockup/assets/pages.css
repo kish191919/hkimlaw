@@ -252,7 +252,7 @@ a.hub-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); bo
 .hub-card__no { font-family: var(--font-serif); font-size: 15px; letter-spacing: .1em; color: var(--accent-text); }
 .hub-card h3 { font-family: var(--font-serif); font-weight: var(--serif-weight); font-size: clamp(25px, 2.6vw, 32px); line-height: 1.25; letter-spacing: -.025em; color: var(--title-color); }
 .hub-card > p { color: var(--muted); }
-.hub-card ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.hub-card ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; } /* 클래스 없는 ul이라 기본 목록 점·들여쓰기를 직접 없앤다 */
 .hub-card li { padding: 6px 12px; border-radius: 999px; background: var(--surface-2); font-size: 14px; font-weight: 600; }
 .hub-card__foot { margin-top: auto; padding-top: 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px dashed var(--line); }
 .hub-card__count { font-size: 14px; color: var(--muted); }

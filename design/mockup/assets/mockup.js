@@ -86,7 +86,7 @@
     var f = focusables(box);
     if (!f.length) return;
     var first = f[0], last = f[f.length - 1];
-    if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+    if (!box.contains(document.activeElement) || document.activeElement === box) { e.preventDefault(); first.focus(); return; }
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
@@ -118,6 +118,14 @@
     if (!open && navBtn && mnav && mnav.contains(document.activeElement)) navBtn.focus();
   }
   if (navBtn) navBtn.addEventListener('click', function () { setNav(!navOpen()); });
+  // 메뉴 바깥(어둡게 가린 화면)을 누르면 닫힌다
+  if (mnav) {
+    var scrim = document.createElement('div');
+    scrim.className = 'mnav-scrim';
+    scrim.setAttribute('aria-hidden', 'true');
+    mnav.parentNode.insertBefore(scrim, mnav);
+    scrim.addEventListener('click', function () { setNav(false); });
+  }
   $$('[data-nav-close], .mnav a').forEach(function (el) { el.addEventListener('click', function () { setNav(false); }); });
 
   /* ---------- 최신 소식 띠 ---------- */
@@ -264,7 +272,224 @@
   }
   window.addEventListener('hashchange', syncMore); // 비자 칩으로 들어와 펼쳐졌던 유형이 다시 접힐 때
 
-  function layoutAll() { processes.forEach(layoutProcess); updateProcess(); syncMore(); }
+  /* ---------- 휴대폰: 옆으로 넘기는 카드 줄 아래 점 (mobile.css '1-1. 옆으로 넘기는 카드 줄') ----------
+     카드가 화면 밖으로 넘칠 때만 보이고, 지금 보고 있는 자리의 점이 길어진다. 점 하나 = 손가락으로 한 번 넘겨 멈추는 자리
+     (세 줄로 쌓인 번호 타일은 한 칸, 끝에 다 보이는 카드 몇 장은 마지막 점 하나). 점은 보조 표시라 화면 낭독기에는 숨긴다.
+     시연판(live.js)이 카드를 새로 채우면 다시 센다. 목록을 바꾸면 mobile.css 1-1도 같이 바꾼다. */
+  var SWIPE = '.situ-grid, .pillars__grid, .principles, .channel-grid, .hub-cards, .how, .types, .flow, .methods, .related, .codes, ' +
+              '.case-grid, .media-mini, .col-track, .stories__track, .nlist';
+  var swipes = $$(SWIPE).map(function (box) {
+    var dots = document.createElement('div');
+    dots.className = 'swipe-dots';
+    dots.setAttribute('aria-hidden', 'true');
+    dots.hidden = true;
+    box.insertAdjacentElement('afterend', dots);
+    var s = { box: box, dots: dots, pos: [], raf: 0 };
+    box.addEventListener('scroll', function () {
+      if (!s.raf) s.raf = requestAnimationFrame(function () { s.raf = 0; markSwipe(s); });
+    }, { passive: true });
+    if ('MutationObserver' in window) new MutationObserver(function () { measureSwipe(s); }).observe(box, { childList: true });
+    return s;
+  });
+  function measureSwipe(s) {
+    var box = s.box, max = box.scrollWidth - box.clientWidth, cols = [];
+    if (narrow.matches && max > 4) {
+      var origin = box.getBoundingClientRect().left - box.scrollLeft;
+      Array.prototype.forEach.call(box.children, function (el) {
+        if (el.hidden || !el.getClientRects().length) return;
+        var x = Math.round(el.getBoundingClientRect().left - origin);
+        if (cols.every(function (c) { return Math.abs(c - x) > 4; })) cols.push(x);
+      });
+      cols.sort(function (a, b) { return a - b; });
+    }
+    // 첫 칸에서 얼마나 넘겨야 그 칸이 맨 앞에 오는지. 끝까지 넘겨도 맨 앞에 못 오는 칸들은 '끝' 한 자리로 합친다
+    s.pos = cols.map(function (c) { return c - cols[0]; }).filter(function (p) { return p < max - 8; });
+    if (s.pos.length) s.pos.push(max);
+    var n = s.pos.length;
+    s.dots.hidden = n < 2;
+    if (s.dots.childElementCount !== n) s.dots.innerHTML = new Array(n + 1).join('<i></i>');
+    markSwipe(s);
+  }
+  function markSwipe(s) {
+    if (s.dots.hidden) return;
+    var x = s.box.scrollLeft, k = 0, best = Infinity;
+    s.pos.forEach(function (p, i) { var d = Math.abs(p - x); if (d < best) { best = d; k = i; } });
+    Array.prototype.forEach.call(s.dots.children, function (d, i) { d.classList.toggle('is-on', i === k); });
+  }
+
+  /* ---------- 휴대폰: 비자·서류 칩 묶음 → '바로 찾기' 버튼 하나 + 아래에서 올라오는 목록 ----------
+     칩이 6개 이상인 묶음(A 홈 비자·서류로 바로 찾기, A 업무분야 비자·서류 이름으로 찾기, B 두 갈래 트랙)을 접는다.
+     칩과 그 위 이름표는 휴대폰에서만 숨기고(mobile.css .chips-folded) 데스크톱은 칩 그대로다.
+     목록은 원래 칩 링크를 복제해 업무분야별로 묶는다(주소의 허브 페이지, B 영문은 data-pick-area). 검색 칸으로 좁힐 수 있다. */
+  var EN = /^en/i.test(root.getAttribute('lang') || '');
+  var AREA_ORDER = ['green', 'nonimm', 'citizen', 'defense', 'etc'];
+  var AREA_NAME = EN
+    ? { green: 'Green cards & immigrant visas', nonimm: 'Nonimmigrant visas', citizen: 'Citizenship', defense: 'Removal defense & relief', etc: 'More' }
+    : { green: '이민비자·영주권', nonimm: '비이민비자', citizen: '시민권', defense: '추방재판·이민구제', etc: '그 밖의 항목' };
+  var FT = EN
+    ? { open: 'Find a visa or form', more: function (names, n) { return names.join(', ') + ' and ' + (n - names.length) + ' more'; },
+        search: 'Search, e.g. H-1B or I-751', close: 'Close', none: 'No match. Tell us about your case in the form below.' }
+    : { open: '비자·서류 고르기', more: function (names, n) { return names.join(' · ') + ' 등 ' + n + '개'; },
+        search: '이름이나 서류 번호 (예: I-751)', close: '닫기', none: '찾는 항목이 없습니다. 다른 이름이나 번호로 찾아보세요.' };
+  function areaOf(a) {
+    var k = a.getAttribute('data-pick-area');
+    if (k) return AREA_NAME[k] ? k : 'etc';
+    var href = a.getAttribute('href') || '';
+    for (var key in HUB) if (href.indexOf(HUB[key]) >= 0) return key;
+    return 'etc';
+  }
+  function findKey(s) { return String(s).toLowerCase().replace(/[\s·.,\/()&-]+/g, ''); }
+
+  var sheet = null, sheetPanel, sheetBody, sheetInput, sheetEmpty, sheetOpener = null;
+  function buildSheet() {
+    sheet = document.createElement('div');
+    sheet.className = 'sheet';
+    sheet.setAttribute('aria-hidden', 'true');
+    sheet.innerHTML = '<div class="sheet__scrim" data-sheet-close></div>' +
+      '<div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title" tabindex="-1">' +
+      '<div class="sheet__head"><h2 class="sheet__title" id="sheet-title"></h2>' +
+      '<button class="sheet__close" type="button" data-sheet-close><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button></div>' +
+      '<label class="sheet__search"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><input type="search" autocomplete="off" enterkeyhint="search"></label>' +
+      '<div class="sheet__body"></div></div>';
+    document.body.appendChild(sheet);
+    sheetPanel = $('.sheet__panel', sheet);
+    sheetBody = $('.sheet__body', sheet);
+    sheetInput = $('input', sheet);
+    sheetInput.placeholder = FT.search;
+    sheetInput.setAttribute('aria-label', FT.search);
+    $('.sheet__close', sheet).setAttribute('aria-label', FT.close);
+    sheet.addEventListener('click', function (e) {
+      if (e.target.closest('[data-sheet-close]')) closeSheet();
+      else if (e.target.closest('.sheet__list a')) closeSheet(true); // 고른 곳으로 이동(같은 화면의 #reach도 스크롤 잠금을 푼 뒤 이동)
+    });
+    sheetInput.addEventListener('input', function () {
+      var q = findKey(sheetInput.value), any = false;
+      $$('.sheet__group', sheetBody).forEach(function (g) {
+        var shown = 0;
+        $$('li', g).forEach(function (li) {
+          var ok = !q || li.getAttribute('data-key').indexOf(q) >= 0;
+          li.hidden = !ok;
+          if (ok) shown++;
+        });
+        g.hidden = !shown;
+        $('h3 small', g).textContent = shown;
+        if (shown) any = true;
+      });
+      sheetEmpty.hidden = any;
+    });
+    // 머리(손잡이·제목)를 아래로 끌어 내리면 닫힌다
+    var head = $('.sheet__head', sheet), y0 = null, dy = 0;
+    head.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('button')) return;
+      y0 = e.clientY; dy = 0;
+      sheet.classList.add('is-dragging');
+      if (head.setPointerCapture) head.setPointerCapture(e.pointerId);
+    });
+    head.addEventListener('pointermove', function (e) {
+      if (y0 === null) return;
+      dy = Math.max(0, e.clientY - y0);
+      sheetPanel.style.transform = 'translateY(' + dy + 'px)';
+    });
+    function endDrag() {
+      if (y0 === null) return;
+      y0 = null;
+      sheet.classList.remove('is-dragging');
+      if (dy > 80) closeSheet(); else sheetPanel.style.transform = '';
+    }
+    head.addEventListener('pointerup', endDrag);
+    head.addEventListener('pointercancel', endDrag);
+  }
+  function fillSheet(f) {
+    $('.sheet__title', sheet).textContent = f.title;
+    sheetBody.innerHTML = '';
+    AREA_ORDER.forEach(function (k) {
+      var links = f.links.filter(function (a) { return areaOf(a) === k; });
+      if (!links.length) return;
+      var g = document.createElement('section');
+      g.className = 'sheet__group';
+      g.setAttribute('aria-label', AREA_NAME[k]);
+      var h = document.createElement('h3');
+      h.textContent = AREA_NAME[k] + ' ';
+      var cnt = document.createElement('small');
+      cnt.textContent = links.length;
+      h.appendChild(cnt);
+      var ul = document.createElement('ul');
+      ul.className = 'sheet__list';
+      links.forEach(function (a) {
+        var label = a.textContent.trim();
+        var c = a.cloneNode(false);
+        ['class', 'data-reveal', 'data-delay'].forEach(function (n) { c.removeAttribute(n); });
+        c.innerHTML = '<span></span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>';
+        c.firstChild.textContent = label;
+        var li = document.createElement('li');
+        li.setAttribute('data-key', findKey(label + ' ' + AREA_NAME[k]));
+        li.appendChild(c);
+        ul.appendChild(li);
+      });
+      g.appendChild(h);
+      g.appendChild(ul);
+      sheetBody.appendChild(g);
+    });
+    sheetEmpty = document.createElement('p');
+    sheetEmpty.className = 'sheet__empty';
+    sheetEmpty.textContent = FT.none;
+    sheetEmpty.hidden = true;
+    sheetBody.appendChild(sheetEmpty);
+    sheetInput.value = '';
+    sheetBody.scrollTop = 0;
+  }
+  function sheetOpen() { return !!sheet && sheet.classList.contains('is-open'); }
+  function openSheet(f, opener) {
+    if (!sheet) buildSheet();
+    fillSheet(f);
+    sheetOpener = opener;
+    opener.setAttribute('aria-expanded', 'true');
+    sheet.classList.add('is-open');
+    sheet.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    // 검색 칸이 아니라 목록 상자에 초점을 둔다(휴대폰 자판이 바로 올라와 목록을 가리지 않게)
+    setTimeout(function () { sheetPanel.focus({ preventScroll: true }); }, 40);
+  }
+  function closeSheet(keepFocus) {
+    if (!sheetOpen()) return;
+    sheet.classList.remove('is-open');
+    sheet.setAttribute('aria-hidden', 'true');
+    sheetPanel.style.transform = '';
+    document.body.style.overflow = '';
+    if (sheetOpener) {
+      sheetOpener.setAttribute('aria-expanded', 'false');
+      if (!keepFocus) sheetOpener.focus({ preventScroll: true });
+    }
+  }
+  $$('.visa-finder__chips, .track__chips, .chips-cloud').forEach(function (box) {
+    var links = $$('a[href]', box);
+    if (links.length < 6) return; // 몇 개뿐이면 칩 그대로(줄바꿈해 다 보인다)
+    var label = box.previousElementSibling;
+    if (!label || !/(^|\s)(visa-finder__label|track__label)(\s|$)/.test(label.className)) label = null;
+    var sec = box.closest('section'), h2 = sec && $('h2', sec);
+    // 버튼 아래 예시: 가장 짧은 이름 세 개를 원래 순서대로 (예: NIW · H-1B · I-751 등 16개)
+    var names = links.map(function (a) { return a.textContent.trim(); });
+    var picks = names.map(function (n, i) { return [n.length, i]; })
+      .sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; }).slice(0, 3)
+      .sort(function (a, b) { return a[1] - b[1]; }).map(function (p) { return names[p[1]]; });
+    var hint = FT.more(picks, names.length);
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'finder-btn';
+    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span class="finder-btn__ic" aria-hidden="true"><svg class="ic"><use href="#i-search"/></svg></span>' +
+      '<span class="finder-btn__txt"><b></b><small></small></span><span class="finder-btn__go" aria-hidden="true"></span>';
+    $('b', btn).textContent = label ? label.textContent.trim() : FT.open;
+    $('small', btn).textContent = hint;
+    (label || box).insertAdjacentElement('beforebegin', btn);
+    box.classList.add('chips-folded');
+    if (label) label.classList.add('chips-folded');
+    var f = { title: label ? label.textContent.trim() : (h2 ? h2.textContent.trim() : FT.open), links: links };
+    btn.addEventListener('click', function () { openSheet(f, btn); });
+  });
+
+  function layoutAll() { processes.forEach(layoutProcess); updateProcess(); syncMore(); swipes.forEach(measureSwipe); }
 
   /* ---------- 탭 ---------- */
   $$('[data-tabs]').forEach(function (w) {
@@ -648,12 +873,14 @@
   /* ---------- 키보드: Esc 닫기 · Tab 가두기 ---------- */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-      if (quizOpen()) closeQuiz();
+      if (sheetOpen()) closeSheet();
+      else if (quizOpen()) closeQuiz();
       else setNav(false);
       return;
     }
     if (e.key !== 'Tab') return;
-    if (quizOpen()) trap($('.modal__panel', quiz), e);
+    if (sheetOpen()) trap(sheetPanel, e);
+    else if (quizOpen()) trap($('.modal__panel', quiz), e);
     else if (navOpen() && mnav) trap(mnav, e);
   });
 

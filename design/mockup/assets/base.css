@@ -175,25 +175,63 @@ input, select, textarea { font: inherit; color: inherit; }
   .site-header .container { justify-content: space-between; }
 }
 
+/* 모바일 메뉴: 메뉴 버튼 쪽(오른쪽)에서 밀려 나오는 서랍. 뒤 화면은 어둡게 가리고, 그 부분을 누르면 닫힌다(mockup.js가 .mnav-scrim을 넣음).
+   메뉴 6개·언어·상담 버튼이 휴대폰 한 화면에 다 보이도록 글자와 간격을 줄였다. */
+.mnav-scrim {
+  position: fixed; inset: 0; z-index: 94;
+  background: var(--mnav-scrim, rgba(7, 14, 28, .56));
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+}
+body.nav-open .mnav-scrim { opacity: 1; visibility: visible; }
 .mnav {
-  position: fixed; inset: 0; z-index: 95; overflow-y: auto;
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 95;
+  width: min(84vw, 360px);
+  overflow-y: auto; overscroll-behavior: contain;
   background: var(--mnav-bg); color: var(--mnav-fg);
-  padding: 88px 24px calc(28px + env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; gap: 4px;
-  opacity: 0; visibility: hidden; transform: translateY(-10px);
-  transition: opacity .3s, transform .3s, visibility .3s;
+  padding: calc(64px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column;
+  box-shadow: -30px 0 60px -30px rgba(0, 0, 0, .55);
+  visibility: hidden; transform: translateX(100%);
+  transition: transform .34s cubic-bezier(.22, .8, .24, 1), visibility .34s;
 }
 body.nav-open { overflow: hidden; }
-body.nav-open .mnav { opacity: 1; visibility: visible; transform: none; }
-.mnav a.mnav__link {
-  font-family: var(--font-serif); font-size: 25px; padding: 13px 0;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
-  display: flex; justify-content: space-between; align-items: center;
+body.nav-open .mnav { visibility: visible; transform: none; }
+/* 왼쪽 위 작은 제목 (닫기 버튼과 같은 줄) */
+.mnav::before {
+  content: "MENU"; position: absolute; top: calc(30px + env(safe-area-inset-top)); left: 22px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .22em; opacity: .55;
 }
-.mnav__close { position: absolute; top: 16px; right: 16px; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; }
-.mnav__close .ic { width: 26px; height: 26px; }
-.mnav__cta { margin-top: 28px; display: grid; gap: 10px; }
-.mnav .lang { align-self: flex-start; margin-top: 20px; }
+.mnav a.mnav__link {
+  font-family: var(--font-serif); font-weight: var(--serif-weight, 400);
+  font-size: 18px; line-height: 1.35; letter-spacing: -.01em; padding: 13px 2px;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  transition: color .2s, padding .2s;
+}
+.mnav a.mnav__link:first-of-type { border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent); }
+.mnav a.mnav__link .ic { width: 17px; height: 17px; flex: none; opacity: .45; transition: opacity .2s, transform .2s; }
+@media (hover: hover) { .mnav a.mnav__link:hover .ic { opacity: 1; transform: translateX(3px); } }
+.mnav a.mnav__link:focus-visible .ic { opacity: 1; transform: translateX(3px); }
+/* 지금 보고 있는 메뉴 */
+.mnav a.mnav__link[aria-current] { color: var(--mnav-accent, var(--accent)); font-weight: var(--serif-weight-strong, 600); }
+.mnav a.mnav__link[aria-current] .ic { opacity: 1; }
+.mnav__close { position: absolute; top: calc(14px + env(safe-area-inset-top)); right: 12px; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; }
+.mnav__close:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.mnav__close .ic { width: 22px; height: 22px; }
+/* 언어·상담 버튼은 서랍 아래쪽에 모은다 (화면이 짧으면 메뉴 바로 뒤에 이어 붙음) */
+.mnav .lang { align-self: flex-start; margin-top: auto; padding-top: 0; }
+.mnav > a.mnav__link:last-of-type { margin-bottom: 22px; }
+.mnav__cta { margin-top: 14px; display: grid; gap: 8px; }
+.mnav__cta .btn--lg { min-height: 48px; padding: 0 18px; font-size: 15.5px; }
+@media (max-height: 600px) {
+  .mnav { padding-top: calc(58px + env(safe-area-inset-top)); }
+  .mnav::before { top: calc(26px + env(safe-area-inset-top)); }
+  .mnav__close { top: calc(10px + env(safe-area-inset-top)); }
+  .mnav a.mnav__link { font-size: 17px; padding-block: 10px; }
+  .mnav > a.mnav__link:last-of-type { margin-bottom: 16px; }
+  .mnav__cta .btn--lg { min-height: 44px; }
+}
 
 /* ---------- 데스크톱 오른쪽 빠른 상담 · 모바일 하단 바 ---------- */
 .quick { position: fixed; right: 18px; top: 50%; transform: translateY(-50%); z-index: 60; display: flex; flex-direction: column; gap: 8px; }
@@ -245,6 +283,11 @@ body.nav-open .mnav { opacity: 1; visibility: visible; transform: none; }
   .editbar { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); }
   .editbar__who { display: none; }
   .has-editbar .toast { bottom: 152px; }
+}
+/* 휴대폰에서는 숨긴다. 글은 데스크톱·태블릿에서 쓰고, 휴대폰에서는 푸터의 '글쓰기 화면' 링크로 들어간다 */
+@media (max-width: 640px) {
+  .editbar { display: none; }
+  .has-editbar .toast { bottom: 104px; }
 }
 @media print { .editbar { display: none; } }
 .footer-admin { margin-left: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
@@ -299,6 +342,51 @@ body.nav-open .mnav { opacity: 1; visibility: visible; transform: none; }
 .quiz__reads a .ic { color: var(--accent-text); }
 .quiz__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .quiz__fine { margin-top: 16px; font-size: 12.5px; color: var(--muted); }
+
+/* ---------- 비자·서류 바로 찾기 (휴대폰: 아래에서 올라오는 목록) ----------
+   mockup.js가 휴대폰에서 비자·서류 칩 묶음(6개 이상)을 '바로 찾기' 버튼(.finder-btn) 하나로 접고,
+   누르면 이 시트에 업무분야별로 묶어 보여 준다(검색 칸 포함). 버튼은 mobile.css에서만 보인다. */
+.finder-btn { display: none; }
+.sheet { position: fixed; inset: 0; z-index: 112; visibility: hidden; transition: visibility .32s; }
+.sheet.is-open { visibility: visible; }
+.sheet__scrim { position: absolute; inset: 0; background: rgba(8, 12, 20, .52); opacity: 0; transition: opacity .32s; }
+.sheet.is-open .sheet__scrim { opacity: 1; }
+.sheet__panel {
+  position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column;
+  width: min(100%, 560px); min-height: min(64dvh, 540px); max-height: min(86dvh, 760px); margin-inline: auto; /* 검색으로 줄어도 높이가 덜컥이지 않게 */
+  background: var(--modal-bg); color: var(--ink); border-radius: 24px 24px 0 0;
+  box-shadow: 0 -24px 60px -24px rgba(0, 0, 0, .4);
+  transform: translateY(100%); transition: transform .38s cubic-bezier(.2, .75, .2, 1);
+}
+.sheet__panel:focus { outline: none; }
+.sheet.is-open .sheet__panel { transform: none; }
+.sheet.is-dragging .sheet__panel { transition: none; }
+/* 머리(손잡이·제목)를 아래로 끌어 내려도 닫힌다 */
+.sheet__head { position: relative; flex: none; padding: 24px 20px 12px; touch-action: none; }
+.sheet__head::before { content: ""; position: absolute; top: 9px; left: 50%; width: 40px; height: 4px; margin-left: -20px; border-radius: 2px; background: var(--line); }
+.sheet__title { padding-right: 44px; font-size: 18px; font-weight: 800; letter-spacing: -.02em; line-height: 1.4; }
+.sheet__close { position: absolute; top: 14px; right: 12px; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; color: var(--muted); }
+.sheet__close:hover { background: var(--surface-2); color: var(--ink); }
+.sheet__search {
+  flex: none; display: flex; align-items: center; gap: 10px; margin: 0 20px 4px; padding: 0 14px; min-height: 48px;
+  border-radius: 14px; background: var(--field-bg, #fff); border: 1px solid var(--line);
+}
+.sheet__search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.sheet__search .ic { width: 18px; height: 18px; color: var(--muted); }
+/* 16px 미만이면 아이폰이 화면을 확대한다 */
+.sheet__search input { flex: 1; min-width: 0; padding: 10px 0; border: 0; background: none; font-size: 16px; outline: none; }
+.sheet__search input::-webkit-search-cancel-button { display: none; }
+.sheet__body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 20px calc(18px + env(safe-area-inset-bottom)); }
+.sheet__group h3 {
+  position: sticky; top: 0; z-index: 1; display: flex; align-items: baseline; gap: 8px; padding: 16px 0 6px;
+  background: var(--modal-bg); font-size: 13px; font-weight: 800; letter-spacing: .02em; color: var(--accent-text);
+}
+.sheet__group h3 small { font-size: 12px; font-weight: 600; color: var(--muted); }
+.sheet__list li:not([hidden]) ~ li { border-top: 1px solid var(--line); } /* 검색으로 숨긴 줄이 있어도 보이는 줄 사이에만 선 */
+.sheet__list a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 50px; padding: 10px 2px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; line-height: 1.4; }
+.sheet__list a .ic { flex: none; width: 18px; height: 18px; color: var(--accent-text); opacity: .7; }
+.sheet__list a:active { background: var(--surface-2); }
+.sheet__empty { padding: 28px 0 10px; text-align: center; font-size: 15px; color: var(--muted); }
 
 /* ---------- 토스트 ---------- */
 .toast {
