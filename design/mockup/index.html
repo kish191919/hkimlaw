@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>홈페이지 디자인 시안 · Law Offices of Vincent Kim</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --ink: #1D1F22; --muted: #62666D; --line: #E4E0D8; --bg: #F6F4EF; --card: #FFFFFF;
+    --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", serif;
+  }
+  body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.7; word-break: keep-all; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3, p, ul { margin: 0; }
+  ul { padding: 0; list-style: none; }
+  .wrap { width: min(100% - 48px, 1200px); margin-inline: auto; }
+  @media (max-width: 560px) { .wrap { width: calc(100% - 32px); } }
+  :focus-visible { outline: 3px solid #3E7BFA; outline-offset: 3px; border-radius: 6px; }
+
+  header.top { padding-block: 26px; border-bottom: 1px solid var(--line); }
+  header.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); }
+  header.top strong { color: var(--ink); letter-spacing: .14em; font-size: 12.5px; }
+
+  .intro { padding-block: clamp(48px, 7vw, 96px) clamp(36px, 5vw, 64px); }
+  .kicker { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #8A6A37; }
+  .intro h1 { margin-top: 18px; font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 5vw, 62px); line-height: 1.22; letter-spacing: -.035em; }
+  .intro p { margin-top: 20px; max-width: 40em; font-size: clamp(16px, 1.4vw, 18.5px); color: var(--muted); }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 36px); }
+  @media (max-width: 900px) { .options { grid-template-columns: 1fr; } }
+  .opt { background: var(--card); border: 1px solid var(--line); border-radius: 26px; padding: 14px 14px 28px; box-shadow: 0 30px 70px -40px rgba(20, 20, 30, .35); }
+  .preview { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 18px; background: #E9E5DD; }
+  .preview iframe { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .preview__link { position: absolute; inset: 0; z-index: 2; }
+  .preview__badge { position: absolute; left: 14px; top: 14px; z-index: 3; padding: 6px 12px; border-radius: 999px; background: rgba(0, 0, 0, .72); color: #fff; font-size: 12.5px; font-weight: 700; pointer-events: none; }
+  .opt__body { padding: 26px 14px 0; }
+  .opt__label { font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--muted); }
+  .opt h2 { margin-top: 8px; font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.02em; }
+  .opt__desc { margin-top: 10px; color: var(--muted); }
+  .swatches { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .sw { display: grid; gap: 6px; justify-items: center; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .sw span { width: 46px; height: 46px; border-radius: 14px; border: 1px solid rgba(0, 0, 0, .08); }
+  .meta { margin-top: 20px; display: grid; gap: 8px; font-size: 14.5px; }
+  .meta li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; }
+  .meta b { color: var(--muted); font-weight: 600; }
+  .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 999px; font-weight: 700; font-size: 15.5px; border: 1.5px solid var(--ink); transition: transform .2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn--a { background: #13294B; border-color: #13294B; color: #fff; }
+  .btn--b { background: #1F3D36; border-color: #1F3D36; color: #fff; }
+  .btn svg { width: 16px; height: 16px; }
+
+  section.block { padding-block: clamp(56px, 7vw, 96px) 0; }
+  .block h2.title { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 3vw, 38px); letter-spacing: -.02em; }
+  .block p.sub { margin-top: 10px; color: var(--muted); }
+  .grid { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .feat { padding: 22px; border-radius: 18px; background: var(--card); border: 1px solid var(--line); }
+  .feat h3 { font-size: 16.5px; letter-spacing: -.01em; }
+  .feat p { margin-top: 6px; font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+  .feat small { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: #8A6A37; }
+  .check { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; }
+  @media (max-width: 760px) { .check { grid-template-columns: 1fr; } }
+  .check li { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+  .check li::before { content: ""; flex: none; width: 18px; height: 18px; margin-top: 4px; border-radius: 5px; border: 1.5px solid #B08D57; }
+  .check b { display: block; }
+  .check span { color: var(--muted); font-size: 14.5px; }
+  .tips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .tips li { padding: 10px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 14.5px; }
+  footer.foot { margin-top: clamp(64px, 8vw, 110px); padding-block: 28px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap"><strong>DESIGN PROPOSAL</strong><span>Law Offices of Vincent Kim · 2026.11</span></div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="wrap">
+        <p class="kicker">홈페이지 디자인 시안</p>
+        <h1>김형걸 변호사님 홈페이지,<br>두 가지 방향을 준비했습니다</h1>
+        <p>메뉴 6개, 이민법 소식과 전문가 칼럼, 상담 동선은 두 시안이 같습니다. 분위기와 첫인상만 다릅니다. PC와 휴대폰에서 모두 열어 보시고 마음에 드는 쪽을 골라 주세요. 섞어서 쓰는 것도 가능합니다.</p>
+      </div>
+    </section>
+
+    <div class="wrap options">
+      <article class="opt">
+        <div class="preview" data-preview>
+          <span class="preview__badge">시안 A</span>
+          <iframe src="a/index.html?embed" title="시안 A 미리보기" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+          <a class="preview__link" href="a/index.html" aria-label="시안 A 메인 화면 열기"></a>
+        </div>
+        <div class="opt__body">
+          <p class="opt__label">OPTION A</p>
+          <h2>Wilshire Editorial</h2>
+          <p class="opt__desc">격식과 신뢰. 지금 카페 배너의 네이비·골드를 이어받고, 큰 명조체 제목과 LA 야경 모션으로 첫 화면에 무게감을 줍니다.</p>
+          <div class="swatches" aria-label="색상">
+            <div class="sw"><span style="background:#13294B"></span>#13294B</div>
+            <div class="sw"><span style="background:#B08D57"></span>#B08D57</div>
+            <div class="sw"><span style="background:#F7F4EE"></span>#F7F4EE</div>
+            <div class="sw"><span style="background:#1F2328"></span>#1F2328</div>
+          </div>
+          <ul class="meta">
+            <li><b>글꼴</b><span>제목 Noto Serif KR · 본문 Pretendard</span></li>
+            <li><b>첫 화면</b><span>전면 영상(시안에서는 야경 모션) + 변호사 프로필 카드</span></li>
+            <li><b>참고</b><span>Boundless, WR Immigration, Fragomen</span></li>
+          </ul>
+          <div class="btns">
+            <a class="btn btn--a" href="a/index.html">메인 화면 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></a>
+            <a class="btn" href="a/news.html">게시글 화면 보기</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="opt">
+        <div class="preview" data-preview>
+          <span class="preview__badge">시안 B</span>
+          <iframe src="b/index.html?embed" title="시안 B 미리보기" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
+          <a class="preview__link" href="b/index.html" aria-label="시안 B 메인 화면 열기"></a>
+        </div>
+        <div class="opt__body">
+          <p class="opt__label">OPTION B</p>
+          <h2>Warm Boutique</h2>
+          <p class="opt__desc">따뜻하고 친근한 부티크 로펌. 크림·딥그린·테라코타 색과 둥근 사진으로 다가가기 쉬운 인상을 주고, 상담으로 이어지는 장치를 촘촘히 배치했습니다.</p>
+          <div class="swatches" aria-label="색상">
+            <div class="sw"><span style="background:#1F3D36"></span>#1F3D36</div>
+            <div class="sw"><span style="background:#C8643B"></span>#C8643B</div>
+            <div class="sw"><span style="background:#F5EFE6"></span>#F5EFE6</div>
+            <div class="sw"><span style="background:#222222"></span>#222222</div>
+          </div>
+          <ul class="meta">
+            <li><b>글꼴</b><span>제목 Noto Serif KR · 본문 Pretendard</span></li>
+            <li><b>첫 화면</b><span>아치형 변호사 사진 + 떠 있는 정보 카드</span></li>
+            <li><b>참고</b><span>Elyon Legal, Herman Legal Group, SimVisa</span></li>
+          </ul>
+          <div class="btns">
+            <a class="btn btn--b" href="b/index.html">메인 화면 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></a>
+            <a class="btn" href="b/news.html">게시글 화면 보기</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <section class="block">
+      <div class="wrap">
+        <h2 class="title">두 시안에 공통으로 들어간 것</h2>
+        <p class="sub">화면을 직접 눌러 보며 확인해 보세요.</p>
+        <div class="grid">
+          <div class="feat"><h3>최신 소식 띠</h3><p>맨 위에 가장 최근 이민법 소식이 돌아가며 표시됩니다.</p><small>Fragomen 참고</small></div>
+          <div class="feat"><h3>1분 비자 진단</h3><p>질문 세 개로 해당 업무분야와 읽을 글을 안내하고, 상담 신청서까지 채워 줍니다.</p><small>SimVisa·Alma 참고</small></div>
+          <div class="feat"><h3>이달의 영주권 문호</h3><p>매달 올리시는 영주권 문호 글을 홈 화면에 고정해 보여 줍니다.</p><small>iminusa 참고</small></div>
+          <div class="feat"><h3>업무분야별 글 자동 연결</h3><p>글을 쓸 때 업무분야만 고르면 해당 분야에 관련 글로 쌓입니다.</p><small>기획 제안</small></div>
+          <div class="feat"><h3>상담 절차 타임라인</h3><p>스크롤하면 상담 단계가 차례로 그려집니다.</p><small>Alma 참고</small></div>
+          <div class="feat"><h3>1분 이민법 (숏츠)</h3><p>앞으로 만드실 유튜브 숏츠가 자동으로 표시될 자리입니다.</p><small>Hacking Immigration Law 참고</small></div>
+          <div class="feat"><h3>모바일 하단 상담 버튼</h3><p>휴대폰 화면 아래에 카톡 상담·빠른 상담·전화가 늘 보입니다.</p><small>대륜 국제이민부 참고</small></div>
+          <div class="feat"><h3>법적 고지·개인정보 동의</h3><p>승인 사례 면책 문구, 상담 폼 동의, 책임 변호사 표기를 넣었습니다.</p><small>캘리포니아 광고 규정 반영</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <h2 class="title">확인 부탁드리는 내용</h2>
+        <p class="sub">시안에는 예시로 넣어 두었습니다. 알려 주시면 정확하게 반영하겠습니다.</p>
+        <ul class="check">
+          <li><div><b>사진</b><span>카페에 올리신 사무실 사진을 시안에 임시로 썼습니다. 사용해도 될지, 전문 촬영을 할지 알려 주세요.</span></div></li>
+          <li><div><b>숫자 표기</b><span>이민법 20년, 글 1,500편 이상, 카페 회원 2,100명 이상을 홈페이지에 써도 될지 확인 부탁드립니다.</span></div></li>
+          <li><div><b>운영 시간·상담료</b><span>운영 시간과 상담료 정책(유료·무료, 수임 시 차감 여부)을 알려 주세요.</span></div></li>
+          <li><div><b>상담 방식·언어</b><span>방문·전화·화상·카카오톡 상담 가능 여부와 한국어·영어 상담 표기를 확인해 주세요.</span></div></li>
+          <li><div><b>승인 사례</b><span>카페·블로그의 승인 사례를 홈페이지에 실어도 될지, 익명화 기준과 함께 알려 주세요.</span></div></li>
+          <li><div><b>방송 자료</b><span>KBS America 출연 영상·사진을 쓸 수 있는지, 다른 출연·기고 이력이 있는지 알려 주세요.</span></div></li>
+          <li><div><b>카카오톡</b><span>상담에 쓸 카카오톡 채널이나 오픈채팅 링크를 알려 주세요.</span></div></li>
+          <li><div><b>후기·숏츠</b><span>후기와 숏츠는 자리만 잡아 둔 예시입니다. 실제 내용이 생기면 자동으로 채워집니다.</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wrap">
+        <h2 class="title">보는 방법</h2>
+        <ul class="tips">
+          <li>PC에서 창 폭을 줄이면 휴대폰 화면으로 바뀝니다</li>
+          <li>‘1분 비자 진단’ 버튼을 눌러 보세요</li>
+          <li>상담 신청서는 시안이라 전송되지 않습니다</li>
+          <li>업무분야(시안 B)는 탭을 눌러 바꿔 볼 수 있습니다</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">디자인 시안 · 2026.11 · 일부 문구와 콘텐츠는 예시이며, 확정 전 변호사님 검토를 거쳐 반영합니다.</div>
+  </footer>
+
+<script>
+  (function () {
+    var previews = Array.prototype.slice.call(document.querySelectorAll('[data-preview]'));
+    function fit() {
+      previews.forEach(function (p) {
+        var f = p.querySelector('iframe');
+        var s = p.clientWidth / 1440;
+        f.style.transform = 'scale(' + s + ')';
+        f.style.height = Math.ceil(p.clientHeight / s) + 'px';
+      });
+    }
+    fit();
+    window.addEventListener('resize', fit);
+  })();
+</script>
+</body>
+</html>
