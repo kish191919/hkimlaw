@@ -132,12 +132,24 @@ input, select, textarea { font: inherit; color: inherit; }
 .logo__text { display: grid; line-height: 1.25; }
 .logo__ko { font-weight: 700; font-size: 17px; letter-spacing: -.02em; }
 .logo__en { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; }
-/* 영문 페이지: 로고 아랫줄(IMMIGRATION ATTORNEY · LOS ANGELES)이 길어 휴대폰에서 메뉴 버튼을 밀어내지 않게 */
+/* 휴대폰: 로고가 메뉴 버튼을 화면 밖으로 밀어내지 않게 한다(로고는 줄어들 수 있고, 그래도 넘치면 말줄임).
+   영문 로고는 글자가 길어 420px 이하에서 아랫줄의 ' · Los Angeles'(.logo__city)를 숨기고,
+   360px 이하(작은 휴대폰)에서는 한국어·영문 모두 로고 둘레 간격과 아랫줄 자간을 줄인다. */
 @media (max-width: 480px) {
-  html[lang="en"] .site-header .logo { flex: 0 1 auto; min-width: 0; }
-  html[lang="en"] .site-header .logo__text { min-width: 0; }
-  html[lang="en"] .site-header .logo__en { letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .site-header .logo { flex: 0 1 auto; min-width: 0; }
+  .site-header .logo__text { min-width: 0; }
+  .site-header .logo__ko, .site-header .logo__en { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  html[lang="en"] .site-header .logo__en { letter-spacing: .06em; }
 }
+@media (max-width: 420px) { html[lang="en"] .site-header .logo__city { display: none; } }
+@media (max-width: 360px) {
+  .site-header .container { gap: 12px; }
+  .site-header .logo { gap: 10px; }
+  .site-header .logo__mark { width: 40px; height: 40px; }
+  .site-header .logo__en { letter-spacing: .06em; }
+}
+@media (max-width: 374px) { html[lang="en"] .site-header .logo__ko { font-size: 15.5px; } }
+@media (max-width: 340px) { html[lang="en"] .site-header .logo__ko { font-size: 14.5px; } }
 .gnav { margin-left: auto; }
 .gnav ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
 .gnav a {
@@ -345,7 +357,9 @@ body.motion-paused *, body.motion-paused *::before, body.motion-paused *::after 
 }
 
 /* ---------- 캐러셀 · 가로 스크롤 ---------- */
-.hscroll { display: grid; grid-auto-flow: column; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 24px; padding-bottom: 6px; scrollbar-width: none; overscroll-behavior-x: contain; }
+/* position: relative — 안쪽의 화면 낭독용 글자(.sr-only, position: absolute)가 가로 스크롤 밖으로 빠져나가
+   휴대폰에서 페이지 전체가 옆으로 밀리지 않게, 스크롤 상자를 기준 상자로 삼는다 */
+.hscroll { position: relative; display: grid; grid-auto-flow: column; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 24px; padding-bottom: 6px; scrollbar-width: none; overscroll-behavior-x: contain; }
 .hscroll::-webkit-scrollbar { display: none; }
 .hscroll > * { scroll-snap-align: start; }
 .car-nav { display: flex; gap: 10px; }

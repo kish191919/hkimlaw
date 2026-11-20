@@ -150,6 +150,11 @@ def logo(ko="김형걸 이민법 변호사", en="Law Offices of Vincent Kim", la
             % (href, label, ko, en))
 
 
+# 영문 페이지 로고. 작은 휴대폰(360px 이하)에서는 아랫줄의 ' · Los Angeles'를 숨긴다(base.css .logo__city).
+EN_LOGO = logo("Law Offices of Vincent Kim", 'Immigration Attorney<span class="logo__city"> · Los Angeles</span>',
+               "Law Offices of Vincent Kim home", "en.html")
+
+
 def current(key, active, section):
     if key == active:
         return ' aria-current="page"'
@@ -1391,7 +1396,7 @@ def page_en(t):
   {lang}
   <div class="mnav__cta"><a class="btn btn--primary btn--lg" href="{tel}">{phone_ic}{phone}</a></div>
 </div>
-""".format(cls=t["header"], logo=logo("Law Offices of Vincent Kim", "Immigration Attorney · Los Angeles", "Law Offices of Vincent Kim home", "en.html"),
+""".format(cls=t["header"], logo=EN_LOGO,
            items=items, lang=LANG_EN, tel=TEL, phone_ic=ic("phone"), phone=PHONE, book=book, menu=ic("menu"),
            close=ic("close"), m_links=m_links)
 
@@ -1555,7 +1560,7 @@ def page_en(t):
   <a class="is-main" href="#contact">{pen}Request</a>
   <a class="is-call" href="{tel}">{phone_ic}Call</a>
 </nav>
-""".format(logo=logo("Law Offices of Vincent Kim", "Immigration Attorney · Los Angeles", "Law Offices of Vincent Kim home", "en.html"),
+""".format(logo=EN_LOGO,
            vb=VB_URL, phone_ic=ic("phone"), tel=TEL, phone=PHONE, mail=ic("mail"), email=EMAIL, pin=ic("pin"),
            a1=ADDR1, a2=ADDR2, pen=ic("pen"), up=ic("up"),
            legal=footer_legal("디자인 시안 · 영문 페이지 예시입니다. 문구는 변호사님 검수 후 확정합니다.", en=True))
@@ -1594,14 +1599,6 @@ B_CODES = [
     ("K-1", "약혼자비자", "nonimm", "t-other"), ("N-400", "귀화 신청", "citizen", "t-n400"),
     ("N-600", "시민권 증서", "citizen", "t-n600"), ("EOIR", "이민법원 추방재판", "defense", "t-court"),
     ("I-601", "입국금지 면제", "defense", "t-waiver"), ("I-589", "망명", "defense", "t-asylum"),
-]
-B_DUTIES = [
-    ("시민권자 배우자·가족 초청", "green", "t-family"), ("취업이민 EB-2·EB-3", "green", "t-employment"),
-    ("국가이익면제(NIW)", "green", "t-niw"), ("투자이민 EB-5", "green", "t-eb5"),
-    ("조건부 영주권 해지(I-751)", "green", "t-i751"), ("취업비자 H-1B·주재원 L-1", "nonimm", "t-h1b"),
-    ("소액투자비자 E-2", "nonimm", "t-e2"), ("학생비자 F-1·OPT", "nonimm", "t-student"),
-    ("시민권 신청(N-400)", "citizen", "t-n400"), ("이민법원 추방재판 변론", "defense", "t-court"),
-    ("웨이버 I-601·I-601A", "defense", "t-waiver"), ("거절·RFE·과거 기록 대응", "defense", "t-record"),
 ]
 B_SIGNATURE = "복잡한 이민법, 끝까지 직접 챙기겠습니다"
 
@@ -1780,6 +1777,14 @@ B_PILLARS = [
 ]
 
 
+# 홈 소개 구역 옆에 붙이는 한 줄짜리 '일하는 방식'. 긴 문장은 변호사 소개 페이지(B_PILLARS)에만 둔다
+B_PILLARS_HOME = [
+    ("chat", "직접 상담하는 변호사", "첫 상담부터 인터뷰 준비까지 변호사가 직접 듣고 설명합니다."),
+    ("cap", "공부하는 변호사", "바뀌는 규정과 판결을 정리해 카페와 블로그에 나눠 왔습니다."),
+    ("users", "소통하는 변호사", "진행 상황과 바뀐 규정의 영향을 먼저 알려 드립니다."),
+]
+
+
 def pillars_b(items=B_PILLARS):
     return '<div class="pillars__grid">%s</div>' % "".join(
         '<article class="pillar" data-reveal data-delay="%d"><span class="pillar__ic">%s</span><h3>%s</h3><p>%s</p></article>'
@@ -1840,62 +1845,49 @@ def page_home_b(t):
     vb = [p for p in news_all if p["type"] == "bulletin"][0]
     vb_href, vb_attrs = post_link(vb)
     news = [p for p in news_all if p["type"] != "bulletin"][:5]
-    cols = [p for p in posts(board="column") if p["type"] != "case"][:4]
+    cols = [p for p in posts(board="column") if p["type"] != "case"][:3]
     cases = posts(typ="case")[:5]
 
+    # 홈 구성 (7개): 히어로 → 소개 → 두 갈래 업무분야 → 소식 띠 → 칼럼 → 승인 사례 → 상담.
+    # 같은 내용은 한 번만: 경력 수치는 히어로 아래 띠에만, 변호사 이야기는 소개 구역에만, 비자 진단은 업무분야에만.
+    # 영상 칼럼은 유튜브 채널을 연 뒤 다시 넣는다(vthumb, live.js의 vids 모양은 그대로 둠).
     hero = """<section class="bhero" aria-labelledby="hero-title">
   <div class="bhero__media"><img src="../assets/attorney.jpg" alt="사무실 책상에서 업무 중인 김형걸 변호사" width="1230" height="1121" fetchpriority="high"></div>
   <div class="container bhero__inner">
     <div class="bhero__copy">
-      <p class="bhero__kicker" data-reveal>로스앤젤레스 윌셔 · 이민법 한 분야 20년</p>
+      <p class="bhero__kicker" data-reveal>로스앤젤레스 윌셔 · 한국어·영어 상담</p>
       <h1 class="bhero__title" id="hero-title" data-reveal data-delay="1">복잡한 이민법,<br>끝까지 <em>직접</em><br>챙기겠습니다</h1>
       <p class="bhero__firm" data-reveal data-delay="2"><strong>김형걸 변호사</strong><span lang="en">Law Offices of Vincent Kim</span></p>
       <p class="bhero__lead" data-reveal data-delay="2">영주권·비자·시민권·추방재판. 첫 상담부터 결과까지 변호사가 직접 듣고, 직접 설명하고, 직접 챙깁니다.</p>
       <div class="bhero__cta" data-reveal data-delay="3">
         <a class="btn btn--primary btn--lg" href="#reach">상담 예약하기 {arrow}</a>
-        <button class="btn btn--ghost btn--lg" type="button" data-quiz-open>{compass}1분 비자 진단</button>
       </div>
       <a class="bhero__phone" href="{tel}" data-reveal data-delay="4"><span>전화·카카오톡 상담</span><strong>{phone}</strong></a>
     </div>
   </div>
-  <div class="bhero__facts">
+  <div class="bhero__facts bhero__facts--num" aria-label="숫자로 보는 김형걸 변호사">
     <ul class="container">
-      <li>{tv}<span>KBS America 뉴스 출연</span></li>
-      <li>{users}<span>네이버 카페 운영 · 2015년부터</span></li>
-      <li>{globe}<span>한국어·영어 직접 상담</span></li>
-      <li>{pin}<span>3600 Wilshire Blvd. Suite 412</span></li>
+      <li><strong><span data-count="20">20</span><small>년</small></strong><span>이민법 한길</span></li>
+      <li><strong><span data-count="1500" data-suffix="+">1,500+</span></strong><span>직접 쓴 이민법 글 · 블로그</span></li>
+      <li><strong><span data-count="2100" data-suffix="+">2,100+</span></strong><span>카페 회원 · 2015년부터</span></li>
+      <li><strong>KBS</strong><span>America 뉴스 출연 7회</span></li>
     </ul>
   </div>
 </section>
-""".format(arrow=ic("arrow"), compass=ic("compass"), tel=TEL, phone=PHONE, tv=ic("tv"), users=ic("users"),
-           globe=ic("globe"), pin=ic("pin"))
+""".format(arrow=ic("arrow"), tel=TEL, phone=PHONE)
 
-    duties = "".join('<li><a href="%s">%s<span>%s</span></a></li>' % (hub_url(k, a), ic("check"), l) for l, k, a in B_DUTIES)
-    intro = """<section class="section intro" id="intro" aria-labelledby="intro-title">
+    intro = """<section class="section intro intro--home" id="intro" aria-labelledby="intro-title">
   <div class="container intro__grid">
     <div class="intro__main">
       {head}
-      <p class="intro__firm" lang="en">Law Offices of Vincent Kim</p>
-      <p class="intro__bio"><b>김형걸 변호사</b>는 로스앤젤레스 윌셔에서 20년 동안 영주권·비자·시민권·추방재판을 다뤄 왔습니다. 2015년부터 네이버 카페와 블로그에 이민법 소식을 직접 정리해 왔고, KBS America 뉴스에 출연해 정책 변화를 설명했습니다.</p>
-      <h3 class="intro__sub">주요 업무</h3>
-      <ul class="duty">{duties}</ul>
-      <div class="intro__call">
-        <span>이메일 또는 전화 상담<small>한국에 계셔도 화상·카카오톡으로 상담합니다</small></span>
-        <a href="{tel}">{phone}</a>
-      </div>
+      <p class="intro__bio"><b>김형걸 변호사</b>는 로스앤젤레스 윌셔에서 영주권·비자·시민권·추방재판을 다뤄 왔습니다. 이민 서류 한 장에는 한 가족의 몇 년이 걸려 있기에, 가능한 길과 위험을 정직하게 말씀드립니다.</p>
+      <a class="btn btn--ghost intro__more" href="about.html">변호사 소개 자세히 {arrow}</a>
     </div>
-    <aside class="intro__side" aria-labelledby="vc-title" data-reveal="fade">
-      <p class="intro__side-label">김형걸 변호사의 영상 칼럼</p>
-      {thumb}
-      <h3 id="vc-title">11월 영주권 문호, 60초 정리</h3>
-      <p>가족이민·취업이민 문호가 이번 달 어떻게 움직였는지, 누가 지금 서류를 준비해야 하는지 1분 안에 정리합니다.</p>
-      <p class="inline-call">{phone_ic}<span><b>상담 문의</b> <a href="{tel}">{phone}</a> <i aria-hidden="true">|</i> <a href="mailto:{email}">{email}</a></span></p>
-    </aside>
+    <div class="intro__ways" aria-label="일하는 방식">{ways}</div>
   </div>
 </section>
-""".format(head=bhead("About", "이민법 한 분야만,<br><em>20년</em> 동안", "intro-title"), duties=duties, tel=TEL, phone=PHONE,
-           thumb=vthumb("11월<br>영주권 <em>문호</em>", "이달의 영주권 문호", "시안: 유튜브 영상이 이 자리에서 바로 재생됩니다.", " vthumb--lg"),
-           phone_ic=ic("phone"), email=EMAIL)
+""".format(head=bhead("About", "이민법 한 분야만<br><em>한길</em>로 걸어왔습니다", "intro-title"),
+           ways=pillars_b(B_PILLARS_HOME), arrow=ic("arrow"))
 
     tracks = """<section class="section tracks" id="practice" aria-labelledby="tracks-title">
   <div class="container">
@@ -1907,38 +1899,6 @@ def page_home_b(t):
 """.format(head=bhead("Practice areas", "어떤 <em>길</em>이 필요하신가요?", "tracks-title",
                       "이민법 일은 크게 두 갈래입니다. 미국에서 신분을 얻는 일, 그리고 위기에 놓인 신분을 지키는 일. 지금 상황에 맞는 쪽을 고르세요.", center=True),
            grid=tracks_b(), compass=ic("compass"), arrow=ic("arrow"))
-
-    numbers = """<section class="section numbers" aria-labelledby="num-title">
-  <div class="container">
-    {head}
-    <div class="ntiles">
-      <div class="ntile" data-reveal><p class="ntile__num"><span data-count="20">20</span><small>년</small></p><p class="ntile__label">이민법 한길<small>로스앤젤레스 윌셔</small></p></div>
-      <div class="ntile" data-reveal data-delay="1"><p class="ntile__num"><span data-count="1500" data-suffix="+">1,500+</span></p><p class="ntile__label">직접 쓴 이민법 글<small>네이버 블로그</small></p></div>
-      <div class="ntile ntile--hl" data-reveal data-delay="2"><p class="ntile__num"><span data-count="2100" data-suffix="+">2,100+</span></p><p class="ntile__label">함께한 카페 회원<small>2015년부터</small></p></div>
-      <div class="ntile" data-reveal data-delay="3"><p class="ntile__num ntile__num--text">KBS</p><p class="ntile__label">America 뉴스 출연<small>2015 – 2026 · 7회</small></p></div>
-    </div>
-    {memo}
-  </div>
-</section>
-""".format(head=bhead("By the numbers", "숫자로 보는 <em>20년</em>", "num-title"),
-           memo=memo("숫자는 검증할 수 있는 사실만 씁니다(네이버 카페·블로그 기준, 2026.11). 참고 사이트의 ‘+2800 성공케이스’처럼 성공 건수·승소율을 내세우는 표현은 캘리포니아 변호사 광고 규정상 근거가 필요해 넣지 않았습니다."))
-
-    vids = [
-        ("영주권 카드<br><em>분실</em>했다면?", "실무 가이드", "영주권 카드를 잃어버렸다면", "미국 안에서 잃어버렸을 때의 재발급(I-90), 기다리는 동안의 임시 증명(ADIT), 해외 분실 시 여행 서류까지."),
-        ("I-751 승인 전<br><em>시민권</em> 신청?", "Q&amp;A", "I-751 승인 전, 시민권 신청할 수 있나요?", "결혼 2년이 되기 전에 받은 조건부 영주권. 정식 영주권 승인 전에 시민권을 신청할 수 있는지 짚습니다."),
-        ("서류 <em>마감일</em><br>세는 법 변경", "이민국 공지", "이민 서류 마감일, 이렇게 셉니다", "USCIS가 서류 마감일을 셀 때 쓰는 ‘일(day)’의 기준을 바꿨습니다. 기한을 놓치지 않는 방법."),
-    ]
-    vid_html = "".join('<article class="vid" data-reveal data-delay="%d">%s<h3>%s</h3><p>%s</p></article>'
-                       % (i, vthumb(a, b, "시안: 유튜브 숏츠가 이 자리에서 재생됩니다."), c, d) for i, (a, b, c, d) in enumerate(vids))
-    videos = """<section class="section vids" aria-labelledby="vids-title">
-  <div class="container">
-    {head}
-    <div class="vid-grid" data-live-home="videos" data-limit="3" data-variant="vids">{items}</div>
-  </div>
-</section>
-""".format(head=bhead("Video column", "1분 이민법 <em>영상 칼럼</em>", "vids-title",
-                      right='<a class="link-arrow" href="#" data-toast="유튜브 채널은 개설 예정입니다.">유튜브 채널 (개설 예정) %s</a>' % ic("arrow")),
-           items=vid_html)
 
     newsband = """<section class="newsband" id="news" aria-labelledby="news-title">
   <div class="newsband__head">
@@ -1959,12 +1919,11 @@ def page_home_b(t):
   </div>
   <div class="container newsband__more">
     <a class="link-arrow" href="news.html">이민법 소식 전체 보기 {arrow}</a>
-    <span>{cal}모든 글에 작성일과 최종 업데이트일을 표시합니다</span>
   </div>
 </section>
 """.format(head=bhead("Immigration news", "미국 이민법 <em>최신 소식</em>", "news-title", center=True, light=True),
            vb_title=E(vb["title"]), vb_sum=E(vb["sum"]), vb_href=vb_href, vb_attrs=vb_attrs, ur=ic("arrow-ur"),
-           tiles="".join(news_tile(p) for p in news), arrow=ic("arrow"), cal=ic("calendar"))
+           tiles="".join(news_tile(p) for p in news), arrow=ic("arrow"))
 
     colarc = """<section class="section colarc" id="columns" aria-labelledby="col-title">
   <div class="container colarc__grid">
@@ -1972,21 +1931,13 @@ def page_home_b(t):
       <p class="bhead__eyebrow">Expert column</p>
       <h2 class="colarc__title" id="col-title">김형걸 변호사의<br>이민법 <em>칼럼</em></h2>
       <span class="bar" aria-hidden="true"></span>
-      <p class="colarc__by"><img src="../assets/attorney-face.jpg" alt="" width="56" height="56" loading="lazy"><span><b>김형걸 변호사가 직접 씁니다</b>2015년부터 카페·블로그에 1,500편</span></p>
+      <p class="colarc__by"><img src="../assets/attorney-face.jpg" alt="" width="56" height="56" loading="lazy"><span><b>김형걸 변호사가 직접 씁니다</b></span></p>
       <a class="btn btn--ghost" href="column.html">칼럼 전체 보기 {arrow}</a>
     </div>
-    <ol class="colrows" data-live-home="columns" data-limit="4" data-variant="rows">{rows}</ol>
+    <ol class="colrows" data-live-home="columns" data-limit="3" data-variant="rows">{rows}</ol>
   </div>
 </section>
 """.format(arrow=ic("arrow"), rows="".join(col_row(p) for p in cols))
-
-    pillars = """<section class="section pillars" aria-labelledby="pil-title">
-  <div class="container">
-    {head}
-    {grid}
-  </div>
-</section>
-""".format(head=bhead("How I work", "이런 변호사가 <em>되겠습니다</em>", "pil-title", center=True), grid=pillars_b())
 
     stories = """<section class="stories" aria-labelledby="stories-title">
   <div class="container" data-carousel>
@@ -1998,19 +1949,21 @@ def page_home_b(t):
       </div>
     </div>
     <ul class="stories__track hscroll" data-carousel-track data-live-home="cases" data-variant="slides">{slides}</ul>
-    <p class="disclaim">{shield}개별 사건의 결과는 사실관계와 법적 상황에 따라 다르며, 과거의 결과가 향후 유사한 사건의 결과를 보장하지 않습니다. 사례는 변호사님 블로그에 공개된 글이며, 의뢰인 동의를 받아 식별 정보를 지운 뒤 싣습니다.</p>
-    <p class="stories__reviews">{star}<span>구글 비즈니스 프로필을 연동하면 실제 고객 후기(이니셜·날짜 표시)가 이 띠에 함께 돌아갑니다. 후기를 지어내지 않도록 연동 전에는 비워 둡니다.</span></p>
+    <p class="disclaim">{shield}개별 사건의 결과는 사실관계와 법적 상황에 따라 다르며, 과거의 결과가 향후 유사한 사건의 결과를 보장하지 않습니다.</p>
   </div>
 </section>
 """.format(head=bhead("Case stories", "승인 사례 <em>이야기</em>", "stories-title", light=True), left=ic("arrow-left"),
-           right=ic("arrow"), slides="".join(story_slide(p) for p in cases), shield=ic("shield"), star=ic("star-line"))
+           right=ic("arrow"), slides="".join(story_slide(p) for p in cases), shield=ic("shield"))
 
     areas = "".join('<option value="%s">%s</option>' % (k, HUBS[k]["name"]) for k in HUB_ORDER)
     reach = """<section class="section reach" id="reach" aria-labelledby="reach-title">
   <div class="container">
     <div class="reach__card">
       <div class="reach__top">
-        {head}
+        <div>
+          {head}
+          <p class="reach__lead">첫 상담부터 김형걸 변호사가 직접 듣습니다. 한국에 계셔도 전화·화상·카카오톡으로 상담할 수 있습니다.</p>
+        </div>
         <ul class="reach__info">
           <li>{pin}<span><small>사무실</small>{a1}<br>{a2}</span></li>
           <li>{phone_ic}<span><small>전화</small><a href="{tel}">{phone}</a></span></li>
@@ -2026,28 +1979,27 @@ def page_home_b(t):
           <div class="field full"><label for="r-msg">상담 내용 <span class="req">*</span></label><textarea id="r-msg" name="message" maxlength="1000" required placeholder="현재 상황을 간단히 적어 주세요. 여권번호·A-Number·SSN 같은 민감한 정보는 적지 마세요."></textarea></div>
           <label class="check full"><input type="checkbox" name="agree" required><span>(필수) 상담 연락을 위한 개인정보 수집·이용(12개월 보관 후 삭제)에 동의하며, 문의만으로 변호사-의뢰인 관계가 성립하지 않는다는 점을 확인했습니다.</span></label>
           <button class="btn btn--primary btn--lg btn--block full" type="submit">상담 신청 보내기 {arrow}</button>
-          <p class="form-note full">항목 네 개면 충분합니다. 이메일·희망 일시까지 남기시려면 <a href="contact.html#form">자세한 상담 신청서</a>를 이용하세요. 시안 화면이라 실제로 전송되지는 않습니다.</p>
+          <p class="form-note full">이메일·희망 일시까지 남기시려면 <a href="contact.html#form">자세한 상담 신청서</a>를 이용하세요. 시안 화면이라 실제로 전송되지는 않습니다.</p>
         </div>
       </form>
     </div>
   </div>
 </section>
-""".format(head=bhead("Contact", "궁금하신 점은<br>언제든 <em>물어보세요</em>", "reach-title", light=True), pin=ic("pin"), a1=ADDR1,
+""".format(head=bhead("Contact", "혼자 <em>고민하지</em><br>마세요", "reach-title", light=True), pin=ic("pin"), a1=ADDR1,
            a2=ADDR2, phone_ic=ic("phone"), tel=TEL, phone=PHONE, chat=ic("chat"), kakao=KAKAO, mail=ic("mail"), email=EMAIL,
            areas=areas, arrow=ic("arrow"))
 
-    main = (hero + intro + tracks + numbers + videos + newsband + colarc + pillars + stories
-            + callband_b("혼자 고민하지 마세요", "첫 상담부터 김형걸 변호사가 직접 듣습니다. 한국에 계셔도 전화·화상·카카오톡으로 상담할 수 있습니다.", "#reach")
-            + reach)
+    main = hero + intro + tracks + newsband + colarc + stories + reach
     return (head(t, "LA 이민법 변호사 (영주권·비자·시민권·추방재판)",
                  "로스앤젤레스 윌셔의 이민법 변호사 김형걸(Vincent Kim). 영주권·비자·시민권·추방재판 상담.", "is-home")
             + skip() + ticker() + header(t, "home") + mnav("home") + '<main id="main">\n' + main + "</main>\n"
-            + footer(t, "디자인 시안입니다. 영상·후기·운영 시간 등 일부 내용은 예시이며 확인 후 반영합니다.")
+            + footer(t, "디자인 시안입니다. 운영 시간 등 일부 내용은 예시이며 확인 후 반영합니다.")
             + floating(t, "#reach") + end(t, "홈"))
 
 
 # ---------------------------------------------------------------------------
-# 시안 B 영문 홈: 한국어 홈(page_home_b)과 같은 구성과 순서.
+# 시안 B 영문 홈: 처음에는 한국어 홈(page_home_b)과 같은 구성과 순서였다. 한국어 홈은 2026-11-20에
+# 7개 구역으로 줄였고(기획서 §7.1), 영문 홈은 아직 이전 구성(소개·수치·일하는 방식·상담 띠 포함)이다.
 # 한국어로만 쓰는 글(이민법 소식·칼럼·승인 사례·영상 칼럼) 자리는 영어 사용자에게 맞는 내용으로 바꾼다:
 #   영상 칼럼 → KBS 방송 출연(한국어 방송), 칼럼 아카이브 → 누구를 돕는지, 소식 띠 → 방송 출연 띠.
 # 한 페이지 시안이라 업무분야 링크는 같은 페이지의 업무분야(#practice)나 간단 문의(#reach)로 간다.
@@ -2137,7 +2089,7 @@ def header_en_b():
     <a class="btn btn--primary btn--lg" href="{tel}">{phone_ic}{phone}</a>
   </div>
 </div>
-""".format(logo=logo("Law Offices of Vincent Kim", "Immigration Attorney · Los Angeles", "Law Offices of Vincent Kim home", "en.html"),
+""".format(logo=EN_LOGO,
            items=items, lang=LANG_EN, tel=TEL, phone=PHONE, menu=ic("menu"), close=ic("close"), m_links=m_links,
            kakao=KAKAO_EN, chat=ic("chat"), phone_ic=ic("phone"))
 
@@ -2192,7 +2144,7 @@ def footer_en_b():
   <a class="is-main" href="#reach">{pen}Book</a>
   <a class="is-call" href="{tel}">{phone_ic}Call</a>
 </nav>
-""".format(logo=logo("Law Offices of Vincent Kim", "Immigration Attorney · Los Angeles", "Law Offices of Vincent Kim home", "en.html"),
+""".format(logo=EN_LOGO,
            phone_ic=ic("phone"), tel=TEL, phone=PHONE, chat=ic("chat"), mail=ic("mail"), email=EMAIL, pin=ic("pin"),
            a1=ADDR1, a2=ADDR2, kbs=KBS_POST, vb=VB_URL, kakao=KAKAO_EN, pen=ic("pen"), up=ic("up"),
            legal=footer_legal("디자인 시안 · 영문 홈 예시입니다. 한국어 홈과 같은 구성이며, 문구는 변호사님 검수 후 확정합니다.", en=True))
