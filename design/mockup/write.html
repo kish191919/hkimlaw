@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>글쓰기 화면 시안 · 김형걸 이민법 변호사 관리자</title>
+<meta name="description" content="변호사님이 직접 이민법 소식과 칼럼을 올리는 관리자 화면 시안. 게시판 선택, 글 템플릿, 업무분야 체크, 3줄 요약, SNS 공유 키트.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F2F3F5">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+<script src="assets/icons.js"></script>
+<a class="skip-link" href="#editor">글쓰기로 건너뛰기</a>
+
+<header class="adm-top">
+  <div class="adm-top__brand"><span class="adm-mark">VK</span><strong>관리자</strong><span class="adm-top__site">김형걸 이민법 변호사</span></div>
+  <nav class="adm-top__links" aria-label="사이트">
+    <a href="index.html">시안 표지</a>
+    <a href="a/index.html">사이트 보기 (A안)</a>
+    <a href="b/index.html">사이트 보기 (B안)</a>
+  </nav>
+  <span class="adm-me"><img src="assets/attorney-face.jpg" alt="" width="30" height="30">김형걸 · 편집자</span>
+</header>
+
+<p class="adm-banner"><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg><span><b>시안 화면입니다.</b> 실제 관리자 화면은 WordPress 편집기에 이 구성(바로가기 버튼, 발행 전 확인, SNS 공유 키트)을 더해 만듭니다. 입력한 내용은 저장되지 않습니다.</span></p>
+
+<div class="adm-shell">
+  <nav class="adm-side" aria-label="바로가기">
+    <p class="adm-side__title">바로가기</p>
+    <button class="adm-quick" type="button" data-pick-board="news"><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg>이민법 소식 쓰기</button>
+    <button class="adm-quick" type="button" data-pick-board="column" aria-pressed="true"><svg class="ic" aria-hidden="true"><use href="#i-pen"/></svg>전문가 칼럼 쓰기</button>
+    <button class="adm-quick" type="button" data-template="bulletin"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>이달의 영주권 문호</button>
+    <button class="adm-quick" type="button" data-toast="시안: 상담 문의 목록이 열립니다. 새 문의 3건 (영주권 2, 시민권 1)"><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg>상담 문의 확인<span class="adm-badge">3</span></button>
+    <button class="adm-quick" type="button" data-toast="시안: 이번 달 방문자·상담 문의·검색 순위를 한 장으로 보여 주는 리포트가 열립니다."><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>이번 달 리포트</button>
+    <div class="adm-goal">
+      <p>이번 달 쓴 글 <b>6</b>편 <span>/ 목표 8편</span></p>
+      <div class="adm-goal__bar" role="progressbar" aria-label="이번 달 목표" aria-valuemin="0" aria-valuemax="8" aria-valuenow="6"><span style="width:75%"></span></div>
+      <small>지금 카페에 쓰시는 속도(주 2편)와 같습니다.</small>
+    </div>
+  </nav>
+
+  <main class="adm-main" id="editor">
+    <div class="adm-head">
+      <h1>새 글 쓰기</h1>
+      <p>카페에 쓰시던 것처럼 <b>게시판 고르기 → 쓰기 → 등록</b>이면 됩니다.</p>
+    </div>
+
+    <section class="adm-card" aria-label="글 작성">
+      <div class="adm-row">
+        <span class="adm-label" id="board-label">게시판</span>
+        <div class="adm-seg" role="radiogroup" aria-labelledby="board-label">
+          <label><input type="radio" name="board" value="news"><span>이민법 소식</span></label>
+          <label><input type="radio" name="board" value="column" checked><span>전문가 칼럼</span></label>
+        </div>
+        <span class="adm-help">6개월 뒤에도 유효한 글이면 <b>칼럼</b>, 아니면 <b>소식</b></span>
+      </div>
+      <div class="adm-row">
+        <span class="adm-label">글 템플릿</span>
+        <div class="adm-tpls">
+          <button type="button" data-template="bulletin">영주권 문호</button>
+          <button type="button" data-template="news">이민법 소식</button>
+          <button type="button" data-template="qna">Q&amp;A 해설</button>
+          <button type="button" data-template="case">승인 사례</button>
+        </div>
+      </div>
+
+      <label class="sr-only" for="w-title">제목</label>
+      <input class="adm-title" id="w-title" value="영주권 카드를 분실했다면: 재발급(I-90)과 임시 증명(ADIT)" placeholder="제목을 입력하세요">
+
+      <div class="adm-toolbar" role="toolbar" aria-label="글자 모양">
+        <button type="button" data-cmd="bold" aria-label="굵게"><b>B</b></button>
+        <button type="button" data-cmd="italic" aria-label="기울임"><i>I</i></button>
+        <button type="button" data-cmd="h2" aria-label="소제목">소제목</button>
+        <button type="button" data-cmd="ul" aria-label="글머리 목록">• 목록</button>
+        <button type="button" data-cmd="quote" aria-label="인용">“ 인용</button>
+        <span class="adm-toolbar__sep" aria-hidden="true"></span>
+        <button type="button" data-toast="시안: 링크 넣기 창이 열립니다.">링크</button>
+        <button type="button" data-pick-image>사진</button>
+        <button type="button" data-toast="시안: 표 넣기 (영주권 문호 템플릿에는 표가 미리 들어 있습니다)">표</button>
+        <button type="button" data-toast="시안: 유튜브 주소를 붙여 넣으면 영상이 들어갑니다.">영상</button>
+      </div>
+      <div class="adm-editor" id="w-body" contenteditable="true" role="textbox" aria-multiline="true" aria-label="본문">
+        <p>영주권 카드를 잃어버리면 당황스럽지만, 순서대로 처리하면 어렵지 않습니다. 다만 <b>어디에서 잃어버렸는지</b>, <b>가까운 시일 안에 해외여행 계획이 있는지</b>에 따라 필요한 절차가 달라집니다.</p>
+        <h2>1. 미국 안에서 분실했을 때</h2>
+        <p>미국 안에서 카드를 잃어버리거나 도난당했다면 Form I-90(영주권 카드 교체 신청)을 제출해 새 카드를 받습니다. 온라인으로도 접수할 수 있습니다.</p>
+        <h2>2. 새 카드를 기다리는 동안: 임시 증명(ADIT)</h2>
+        <p>새 카드가 나오기 전에 해외여행을 하거나 고용주에게 신분을 증명해야 한다면 임시 증명(ADIT)을 요청할 수 있습니다.</p>
+      </div>
+
+      <div class="adm-drop" data-drop>
+        <svg class="ic" aria-hidden="true"><use href="#i-image"/></svg>
+        <p><b>사진을 여기로 끌어다 놓으세요</b> 또는 <label class="adm-file">파일 선택<input type="file" accept="image/*" multiple data-file></label></p>
+        <small>크기는 자동으로 줄이고(가로 1600px), 가벼운 WebP 형식으로 바꿉니다. 휴대폰 사진도 그대로 올리세요.</small>
+        <div class="adm-thumbs" data-thumbs></div>
+      </div>
+      <p class="adm-tip"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>카페에 쓴 글을 복사해 붙여 넣으면 글자 모양이 깔끔하게 정리됩니다. 휴대폰 WordPress 앱으로도 쓸 수 있습니다.</p>
+    </section>
+  </main>
+
+  <aside class="adm-panel" aria-labelledby="chk-title">
+    <section class="adm-card">
+      <div class="adm-panel__head">
+        <h2 id="chk-title">발행 전 확인</h2>
+        <span class="adm-progress" data-progress-text>0 / 4</span>
+      </div>
+
+      <fieldset class="chk" data-check="type">
+        <legend><span class="chk__mark" aria-hidden="true"></span>① 글 유형</legend>
+        <div class="adm-chips" data-type-options></div>
+      </fieldset>
+
+      <fieldset class="chk" data-check="area">
+        <legend><span class="chk__mark" aria-hidden="true"></span>② 업무분야 <small>여러 개 고를 수 있어요</small></legend>
+        <p class="chk__hint">고른 분야의 업무분야 페이지에 ‘관련 글’로 자동으로 실립니다.</p>
+        <div class="adm-areas">
+          <p>이민비자·영주권</p>
+          <label><input type="checkbox" name="area" value="가족이민">가족이민</label>
+          <label><input type="checkbox" name="area" value="취업이민">취업이민·NIW</label>
+          <label><input type="checkbox" name="area" value="간호사 이민">간호사(RN)</label>
+          <label><input type="checkbox" name="area" value="영주권 일반" checked>영주권 일반</label>
+          <p>비이민비자</p>
+          <label><input type="checkbox" name="area" value="취업·투자비자">H-1B·L·E-2</label>
+          <label><input type="checkbox" name="area" value="학생·교환">학생·OPT</label>
+          <label><input type="checkbox" name="area" value="방문·무비자">방문·ESTA</label>
+          <p>시민권 · 추방재판·이민구제</p>
+          <label><input type="checkbox" name="area" value="시민권">시민권</label>
+          <label><input type="checkbox" name="area" value="추방재판">추방재판</label>
+          <label><input type="checkbox" name="area" value="웨이버">웨이버</label>
+        </div>
+      </fieldset>
+
+      <div class="chk" data-check="summary">
+        <p class="chk__legend"><span class="chk__mark" aria-hidden="true"></span>③ 3줄 요약</p>
+        <p class="chk__hint">글 맨 위 요약 상자, 검색 결과 설명, SNS 문구에 그대로 쓰입니다.</p>
+        <label class="sr-only" for="s1">요약 1</label><input class="adm-input" id="s1" data-sum value="미국 안에서 영주권 카드를 잃어버렸다면 Form I-90으로 재발급을 신청합니다.">
+        <label class="sr-only" for="s2">요약 2</label><input class="adm-input" id="s2" data-sum value="새 카드를 기다리는 동안에는 임시 증명(ADIT)을 우편으로도 받을 수 있습니다.">
+        <label class="sr-only" for="s3">요약 3</label><input class="adm-input" id="s3" data-sum value="해외에서 잃어버렸다면 여행 서류(Form I-131A)가 필요할 수 있습니다.">
+      </div>
+
+      <div class="chk chk--case" data-case-only hidden>
+        <p class="chk__legend"><span class="chk__mark" aria-hidden="true"></span>승인 사례 확인</p>
+        <label class="adm-check"><input type="checkbox" data-case-req>이름·날짜·국적 등 알아볼 수 있는 정보를 지웠습니다</label>
+        <label class="adm-check"><input type="checkbox" data-case-req>의뢰인에게 게시 동의를 받았습니다</label>
+        <label class="adm-check adm-check--locked"><input type="checkbox" checked disabled>“과거의 결과가 향후 결과를 보장하지 않습니다” 문구 자동 삽입</label>
+      </div>
+
+      <div class="chk" data-check="image">
+        <p class="chk__legend"><span class="chk__mark is-optional" aria-hidden="true"></span>④ 대표 이미지 <small>선택</small></p>
+        <div class="og" data-og aria-label="카카오톡·SNS 미리보기 이미지">
+          <span class="og__board" data-og-board>전문가 칼럼</span>
+          <strong class="og__title" data-og-title></strong>
+          <span class="og__by">김형걸 변호사 · Law Offices of Vincent Kim</span>
+        </div>
+        <p class="chk__hint">사진을 고르지 않으면 이 이미지가 자동으로 만들어져 카카오톡·SNS 미리보기에 쓰입니다.</p>
+      </div>
+
+      <div class="chk">
+        <p class="chk__legend">발행 시간</p>
+        <div class="adm-seg adm-seg--sm">
+          <label><input type="radio" name="when" value="now" checked><span>지금</span></label>
+          <label><input type="radio" name="when" value="later"><span>예약</span></label>
+        </div>
+        <label class="sr-only" for="w-when">예약 날짜와 시간</label>
+        <input class="adm-input" id="w-when" type="datetime-local" value="2026-11-24T08:00" data-when hidden>
+      </div>
+
+      <div class="adm-actions">
+        <button class="adm-btn" type="button" data-toast="임시 저장했습니다. (시안)">임시 저장</button>
+        <button class="adm-btn adm-btn--primary" type="button" data-publish>발행하기</button>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<div class="kit" id="kit" role="dialog" aria-modal="true" aria-labelledby="kit-title" aria-hidden="true">
+  <div class="kit__panel">
+    <button class="kit__close" type="button" aria-label="닫기" data-kit-close><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    <p class="kit__done"><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg><span data-kit-status>발행했습니다</span></p>
+    <h2 id="kit-title">SNS 공유 키트</h2>
+    <p class="kit__sub">채널마다 알맞은 문구를 자동으로 만들었습니다. <b>복사</b>해서 카페·블로그·오픈카톡에 붙여 넣으세요. 링크에는 어느 채널에서 왔는지 셀 수 있는 표시(UTM)가 붙어 있습니다.</p>
+    <div class="kit__tabs" role="tablist" aria-label="채널">
+      <button type="button" role="tab" aria-selected="true" aria-controls="kit-panel" data-kit="kakao">카카오톡·오픈채팅</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="kit-panel" data-kit="naver" tabindex="-1">네이버 카페·블로그</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="kit-panel" data-kit="threads" tabindex="-1">Threads·Facebook</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="kit-panel" data-kit="insta" tabindex="-1">인스타 카드뉴스</button>
+      <button type="button" role="tab" aria-selected="false" aria-controls="kit-panel" data-kit="shorts" tabindex="-1">숏츠 대본</button>
+    </div>
+    <div role="tabpanel" id="kit-panel" aria-labelledby="kit-tab-0">
+      <label class="sr-only" for="kit-text">공유 문구</label>
+      <textarea class="kit__text" id="kit-text" readonly></textarea>
+    </div>
+    <div class="kit__row">
+      <button class="adm-btn adm-btn--primary" type="button" data-kit-copy><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg>문구 복사</button>
+      <span class="kit__note" data-kit-note>Facebook·Threads 자동 공유는 2단계에 켜집니다. 그 전까지는 복사해서 올리세요.</span>
+    </div>
+    <div class="kit__next">
+      <a href="a/post.html">발행된 글 보기 (A안)</a>
+      <a href="a/practice-green-card.html#related">업무분야 페이지에 실린 모습</a>
+      <span>도메인은 예시입니다.</span>
+    </div>
+  </div>
+</div>
+
+<div class="adm-toast" role="status" aria-live="polite" data-toast-box></div>
+<script src="assets/admin.js"></script>
+</body>
+</html>

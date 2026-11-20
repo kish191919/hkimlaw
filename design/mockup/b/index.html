@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/pages.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,11 +24,11 @@
   <div class="container">
     <span class="ticker__label">NEW</span>
     <div class="ticker__viewport">
-      <a class="ticker__item" href="#news"><span class="ticker__date">2026.11.17</span><span class="ticker__title">연방법원, 유학생 체류기간 제한 규칙 전면 취소</span></a>
-      <a class="ticker__item" href="#news"><span class="ticker__date">2026.11.11</span><span class="ticker__title">승인된 취업비자, 연장 심사 강화 움직임</span></a>
-      <a class="ticker__item" href="#news"><span class="ticker__date">2026.10.27</span><span class="ticker__title">2026년 11월 영주권 문호 정리</span></a>
+      <a class="ticker__item" href="news.html"><span class="ticker__date">2026.11.17</span><span class="ticker__title">연방법원, 유학생 체류기간 제한 규칙 전면 취소</span></a>
+      <a class="ticker__item" href="news.html"><span class="ticker__date">2026.11.11</span><span class="ticker__title">승인된 취업비자, 연장 심사 강화 움직임</span></a>
+      <a class="ticker__item" href="news.html?cat=bulletin"><span class="ticker__date">2026.10.27</span><span class="ticker__title">2026년 11월 영주권 문호 정리</span></a>
     </div>
-    <a class="ticker__more" href="#news">이민법 소식 전체 <svg class="ic"><use href="#i-arrow"/></svg></a>
+    <a class="ticker__more" href="news.html">이민법 소식 전체 <svg class="ic"><use href="#i-arrow"/></svg></a>
   </div>
 </div>
 
@@ -40,18 +41,15 @@
     <nav class="gnav" aria-label="주 메뉴">
       <ul>
         <li><a href="index.html" aria-current="page">홈</a></li>
-        <li><a href="#story">변호사 소개</a></li>
-        <li><a href="#practice">업무분야</a></li>
-        <li><a href="#news">이민법소식</a></li>
-        <li><a href="#columns">전문가칼럼</a></li>
-        <li><a href="#consult">상담안내</a></li>
+        <li><a href="about.html">변호사 소개</a></li>
+        <li><a href="practice.html">업무분야</a></li>
+        <li><a href="news.html">이민법소식</a></li>
+        <li><a href="column.html">전문가칼럼</a></li>
+        <li><a href="contact.html">상담안내</a></li>
       </ul>
     </nav>
     <div class="h-actions">
-      <div class="lang" role="group" aria-label="언어 선택">
-        <button type="button" aria-pressed="true">KO</button>
-        <button type="button" aria-pressed="false" data-toast="영문 페이지(/en/)는 시안 확정 후 제작합니다.">EN</button>
-      </div>
+      <div class="lang" role="group" aria-label="언어 선택"><a href="index.html" aria-current="true">KO</a><a href="en.html" lang="en" hreflang="en">EN</a></div>
       <a class="btn btn--sm btn--ghost btn--call" href="tel:+12137036828"><svg class="ic"><use href="#i-phone"/></svg>(213) 703-6828</a>
       <a class="btn btn--sm btn--primary" href="#consult">상담 예약</a>
       <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mnav" data-nav-toggle><svg class="ic"><use href="#i-menu"/></svg></button>
@@ -59,18 +57,15 @@
   </div>
 </header>
 
-<div class="mnav" id="mnav" aria-label="모바일 메뉴">
+<div class="mnav" id="mnav" role="dialog" aria-modal="true" aria-label="모바일 메뉴">
   <button class="mnav__close" type="button" aria-label="메뉴 닫기" data-nav-close><svg class="ic"><use href="#i-close"/></svg></button>
   <a class="mnav__link" href="index.html">홈 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <a class="mnav__link" href="#story">변호사 소개 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <a class="mnav__link" href="#practice">업무분야 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <a class="mnav__link" href="#news">이민법소식 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <a class="mnav__link" href="#columns">전문가칼럼 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <a class="mnav__link" href="#consult">상담안내 <svg class="ic"><use href="#i-arrow"/></svg></a>
-  <div class="lang" role="group" aria-label="언어 선택">
-    <button type="button" aria-pressed="true">KO</button>
-    <button type="button" aria-pressed="false" data-toast="영문 페이지(/en/)는 시안 확정 후 제작합니다.">EN</button>
-  </div>
+  <a class="mnav__link" href="about.html">변호사 소개 <svg class="ic"><use href="#i-arrow"/></svg></a>
+  <a class="mnav__link" href="practice.html">업무분야 <svg class="ic"><use href="#i-arrow"/></svg></a>
+  <a class="mnav__link" href="news.html">이민법소식 <svg class="ic"><use href="#i-arrow"/></svg></a>
+  <a class="mnav__link" href="column.html">전문가칼럼 <svg class="ic"><use href="#i-arrow"/></svg></a>
+  <a class="mnav__link" href="contact.html">상담안내 <svg class="ic"><use href="#i-arrow"/></svg></a>
+  <div class="lang" role="group" aria-label="언어 선택"><a href="index.html" aria-current="true">KO</a><a href="en.html" lang="en" hreflang="en">EN</a></div>
   <div class="mnav__cta">
     <a class="btn btn--kakao btn--lg" href="#" data-toast="카카오톡 ID: hkimlaw16 (실제 사이트에서는 카카오톡 채팅이 열립니다)"><svg class="ic"><use href="#i-chat"/></svg>카카오톡 상담</a>
     <a class="btn btn--primary btn--lg" href="tel:+12137036828"><svg class="ic"><use href="#i-phone"/></svg>(213) 703-6828</a>
@@ -132,11 +127,11 @@
         <p class="sec-head__desc" data-reveal data-delay="2">비자 이름을 몰라도 괜찮습니다. 지금 상황에 가까운 것을 골라 보세요.</p>
       </div>
       <div class="help__wrap" data-reveal data-delay="2">
-        <a class="help-pill" href="#practice"><span class="hp-ic"><svg class="ic"><use href="#i-family"/></svg></span>가족을 초청하고 싶어요</a>
-        <a class="help-pill" href="#practice"><span class="hp-ic"><svg class="ic"><use href="#i-briefcase"/></svg></span>미국에서 일하고 싶어요</a>
-        <a class="help-pill" href="#practice"><span class="hp-ic"><svg class="ic"><use href="#i-plane"/></svg></span>유학·투자·주재원</a>
-        <a class="help-pill" href="#practice"><span class="hp-ic"><svg class="ic"><use href="#i-flag"/></svg></span>시민권을 신청하려고요</a>
-        <a class="help-pill" href="#practice"><span class="hp-ic"><svg class="ic"><use href="#i-shield"/></svg></span>추방재판·과거 기록 문제</a>
+        <a class="help-pill" href="practice-green-card.html#t-family"><span class="hp-ic"><svg class="ic"><use href="#i-family"/></svg></span>가족을 초청하고 싶어요</a>
+        <a class="help-pill" href="practice-green-card.html#t-employment"><span class="hp-ic"><svg class="ic"><use href="#i-briefcase"/></svg></span>미국에서 일하고 싶어요</a>
+        <a class="help-pill" href="practice-nonimmigrant-visa.html"><span class="hp-ic"><svg class="ic"><use href="#i-plane"/></svg></span>유학·투자·주재원</a>
+        <a class="help-pill" href="practice-citizenship.html"><span class="hp-ic"><svg class="ic"><use href="#i-flag"/></svg></span>시민권을 신청하려고요</a>
+        <a class="help-pill" href="practice-removal-defense.html"><span class="hp-ic"><svg class="ic"><use href="#i-shield"/></svg></span>추방재판·과거 기록 문제</a>
         <button class="help-pill help-pill--quiz" type="button" data-quiz-open><span class="hp-ic"><svg class="ic"><use href="#i-compass"/></svg></span>잘 모르겠어요 · 1분 비자 진단</button>
       </div>
     </div>
@@ -169,7 +164,7 @@
               <li><svg class="ic"><use href="#i-check"/></svg>투자이민 EB-5</li>
               <li><svg class="ic"><use href="#i-check"/></svg>조건부 영주권 해지(I-751)</li>
             </ul>
-            <div class="tp-actions"><a class="btn btn--dark" href="#" data-toast="시안: 업무분야 상세 페이지로 이동합니다.">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
+            <div class="tp-actions"><a class="btn btn--dark" href="practice-green-card.html">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
           </div>
           <aside class="tp-side">
             <p class="eyebrow">이 분야의 최신 글</p>
@@ -194,7 +189,7 @@
               <li><svg class="ic"><use href="#i-check"/></svg>교환방문 J-1</li>
               <li><svg class="ic"><use href="#i-check"/></svg>방문·무비자(B·ESTA)</li>
             </ul>
-            <div class="tp-actions"><a class="btn btn--dark" href="#" data-toast="시안: 업무분야 상세 페이지로 이동합니다.">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
+            <div class="tp-actions"><a class="btn btn--dark" href="practice-nonimmigrant-visa.html">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
           </div>
           <aside class="tp-side">
             <p class="eyebrow">이 분야의 최신 글</p>
@@ -217,7 +212,7 @@
               <li><svg class="ic"><use href="#i-check"/></svg>시민권 증서</li>
               <li><svg class="ic"><use href="#i-check"/></svg>범죄 기록·체류 공백 검토</li>
             </ul>
-            <div class="tp-actions"><a class="btn btn--dark" href="#" data-toast="시안: 업무분야 상세 페이지로 이동합니다.">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
+            <div class="tp-actions"><a class="btn btn--dark" href="practice-citizenship.html">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
           </div>
           <aside class="tp-side">
             <p class="eyebrow">이 분야의 최신 글</p>
@@ -240,7 +235,7 @@
               <li><svg class="ic"><use href="#i-check"/></svg>망명</li>
               <li><svg class="ic"><use href="#i-check"/></svg>과거 기록(프로디 등) 대응</li>
             </ul>
-            <div class="tp-actions"><a class="btn btn--dark" href="#" data-toast="시안: 업무분야 상세 페이지로 이동합니다.">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
+            <div class="tp-actions"><a class="btn btn--dark" href="practice-removal-defense.html">자세히 보기 <svg class="ic"><use href="#i-arrow"/></svg></a><a class="btn btn--ghost" href="#consult">상담 예약</a></div>
           </div>
           <aside class="tp-side">
             <p class="eyebrow">이 분야의 최신 글</p>
@@ -291,7 +286,7 @@
           <p class="eyebrow">이달의 영주권 문호</p>
           <h3>2026년 11월 영주권 문호</h3>
           <p class="vb__desc">가족이민·취업이민 문호의 변동과 변호사 코멘트를 매달 정리합니다.</p>
-          <a class="btn btn--primary" href="#" data-toast="시안: 이번 달 영주권 문호 글로 이동합니다.">이번 달 문호 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--primary" href="https://blog.naver.com/hkimlaw/224454970685" target="_blank" rel="noopener">이번 달 문호 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
           <p class="vb__note">매달 국무부 발표 직후 업데이트</p>
         </aside>
         <div>
@@ -303,8 +298,8 @@
             <li class="news-item" data-reveal><a href="#" data-toast="시안: 게시글 상세 화면은 '영주권 카드를 분실했다면' 1종으로 제작했습니다."><span class="date-badge"><strong>02</strong><span>2026.10</span></span><span><span class="chip">이민국 공지</span><h3>새로운 I-485 양식과 공적부조(Public Charge) 심사</h3><p>새 양식에서 달라진 점과 공적부조 심사 준비 사항을 정리했습니다.</p></span><svg class="ic"><use href="#i-arrow"/></svg></a></li>
           </ul>
           <div class="news__more">
-            <a class="link-arrow" href="#" data-toast="시안: 이민법 소식 목록으로 이동합니다.">모든 소식 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
-            <a class="link-arrow" href="news.html">게시글 화면 예시 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
+            <a class="link-arrow" href="news.html">모든 소식 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
+            <a class="link-arrow" href="post.html">게시글 화면 예시 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
           </div>
         </div>
       </div>
@@ -319,10 +314,10 @@
           <p class="eyebrow" data-reveal>Expert Column</p>
           <h2 class="sec-head__title" id="col-title" data-reveal data-delay="1">전문가 칼럼</h2>
         </div>
-        <a class="link-arrow" href="#" data-toast="시안: 전문가 칼럼 목록으로 이동합니다." data-reveal data-delay="2">칼럼 더 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
+        <a class="link-arrow" href="column.html" data-reveal data-delay="2">칼럼 더 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
       </div>
       <div class="col-grid">
-        <a class="col-card" href="news.html" data-reveal>
+        <a class="col-card" href="post.html" data-reveal>
           <div class="col-card__art art-guide"><span class="demo-flag">상세 화면 예시</span><span class="col-card__kicker">PRACTICAL GUIDE</span><svg class="ic"><use href="#i-doc"/></svg></div>
           <span class="chip">실무 가이드</span>
           <h3>영주권 카드를 분실했다면: 재발급(I-90)과 임시 증명(ADIT)</h3>
@@ -352,7 +347,7 @@
           <p class="eyebrow" data-reveal>Case Results</p>
           <h2 class="sec-head__title" id="cases-title" data-reveal data-delay="1">승인 사례</h2>
         </div>
-        <a class="link-arrow" href="#columns" data-reveal data-delay="2">사례 더 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
+        <a class="link-arrow" href="column.html?cat=case" data-reveal data-delay="2">사례 더 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
       </div>
       <div class="case-grid">
         <article class="case" data-reveal>
@@ -406,7 +401,7 @@
           <li class="badge"><span class="b-ic"><svg class="ic"><use href="#i-users"/></svg></span><span>네이버 카페<small>2015년부터 · 회원 2,100명+</small></span></li>
           <li class="badge"><span class="b-ic"><svg class="ic"><use href="#i-pen"/></svg></span><span>네이버 블로그<small>이민법 글 1,500편+</small></span></li>
         </ul>
-        <a class="btn btn--ghost" href="#" data-toast="시안: 변호사 소개 페이지로 이동합니다." data-reveal data-delay="4">변호사 소개 자세히 <svg class="ic"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--ghost" href="about.html" data-reveal data-delay="4">변호사 소개 자세히 <svg class="ic"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
   </section>
@@ -538,11 +533,11 @@
       <div>
         <p class="footer-title">MENU</p>
         <ul class="footer-links">
-          <li><a href="#story">변호사 소개</a></li>
-          <li><a href="#practice">업무분야</a></li>
-          <li><a href="#news">이민법소식</a></li>
-          <li><a href="#columns">전문가칼럼</a></li>
-          <li><a href="#consult">상담안내</a></li>
+          <li><a href="about.html">변호사 소개</a></li>
+          <li><a href="practice.html">업무분야</a></li>
+          <li><a href="news.html">이민법소식</a></li>
+          <li><a href="column.html">전문가칼럼</a></li>
+          <li><a href="contact.html">상담안내</a></li>
         </ul>
       </div>
       <div>
@@ -574,7 +569,7 @@
       <p>본 웹사이트의 정보는 일반적인 법률 정보이며 법률 자문이 아닙니다. 웹사이트 이용이나 문의만으로 변호사-의뢰인 관계가 성립하지 않습니다. 게시글은 작성일 기준이며 이후 법령과 정책이 바뀌었을 수 있습니다.</p>
       <p>Law Offices of Vincent Kim · 책임 변호사 Vincent Kim · 3600 Wilshire Blvd. Suite 412, Los Angeles, CA 90010</p>
       <p>© <span data-year>2026</span> Law Offices of Vincent Kim. All rights reserved.</p>
-      <p class="mock-note"><svg class="ic"><use href="#i-pen"/></svg>디자인 시안입니다. 운영 시간·후기·숏츠 등 일부 내용은 예시이며 확인 후 반영합니다.</p>
+      <p class="mock-note"><svg class="ic"><use href="#i-pen"/></svg><span>디자인 시안입니다. 운영 시간·후기·숏츠 등 일부 내용은 예시이며 확인 후 반영합니다. · <a href="../write.html">변호사님 글쓰기 화면 보기</a></span></p>
     </div>
   </div>
 </footer>

@@ -9,6 +9,11 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var params = new URLSearchParams(location.search);
+  var HUB = {
+    green: 'practice-green-card.html', nonimm: 'practice-nonimmigrant-visa.html',
+    citizen: 'practice-citizenship.html', defense: 'practice-removal-defense.html'
+  };
 
   /* ---------- 토스트 ---------- */
   var toastEl, toastTimer;
@@ -23,7 +28,7 @@
     toastEl.textContent = msg;
     toastEl.classList.add('is-show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('is-show'); }, 2800);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-show'); }, 3200);
   }
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-toast]');
@@ -32,16 +37,29 @@
     toast(t.getAttribute('data-toast'));
   });
 
+  /* ---------- 포커스 가두기 (모바일 메뉴 · 비자 진단 창) ---------- */
+  var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  function focusables(box) {
+    return $$(FOCUSABLE, box).filter(function (el) { return el.offsetWidth || el.offsetHeight || el.getClientRects().length; });
+  }
+  function trap(box, e) {
+    var f = focusables(box);
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); return; }
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
   /* ---------- 헤더 · 맨 위로 ---------- */
   var header = $('[data-header]');
-  var topBtns = $$('[data-top]');
   function onScroll() {
     var y = window.scrollY || window.pageYOffset;
     if (header) header.classList.toggle('is-scrolled', y > 10);
     updateProcess();
     updateProgress();
   }
-  topBtns.forEach(function (b) {
+  $$('[data-top]').forEach(function (b) {
     b.addEventListener('click', function (e) {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
@@ -50,13 +68,17 @@
 
   /* ---------- 모바일 메뉴 ---------- */
   var navBtn = $('[data-nav-toggle]');
+  var mnav = $('#mnav');
+  function navOpen() { return document.body.classList.contains('nav-open'); }
   function setNav(open) {
+    if (open === navOpen()) return;
     document.body.classList.toggle('nav-open', open);
     if (navBtn) navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open && mnav) setTimeout(function () { var c = $('[data-nav-close]', mnav); if (c) c.focus(); }, 40);
+    if (!open && navBtn && mnav && mnav.contains(document.activeElement)) navBtn.focus();
   }
-  if (navBtn) navBtn.addEventListener('click', function () { setNav(!document.body.classList.contains('nav-open')); });
+  if (navBtn) navBtn.addEventListener('click', function () { setNav(!navOpen()); });
   $$('[data-nav-close], .mnav a').forEach(function (el) { el.addEventListener('click', function () { setNav(false); }); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setNav(false); closeQuiz(); } });
 
   /* ---------- 최신 소식 띠 ---------- */
   $$('[data-ticker]').forEach(function (t) {
@@ -67,6 +89,8 @@
     if (items.length < 2) return;
     t.addEventListener('mouseenter', function () { hover = true; });
     t.addEventListener('mouseleave', function () { hover = false; });
+    t.addEventListener('focusin', function () { hover = true; });
+    t.addEventListener('focusout', function () { hover = false; });
     setInterval(function () {
       if (hover || document.body.classList.contains('motion-paused')) return;
       var cur = items[i];
@@ -211,26 +235,146 @@
     if (next) next.addEventListener('click', function () { go(1); });
   });
 
+  /* ---------- 게시판: 분류 · 업무분야 · 검색 · 페이지 ---------- */
+  $$('[data-board]').forEach(function (board) {
+    var items = $$('[data-item]', board);
+    var filters = $$('[data-filter]', board);
+    var area = $('[data-filter-area]', board);
+    var q = $('[data-filter-q]', board);
+    var count = $('[data-board-count]', board);
+    var empty = $('[data-board-empty]', board);
+    var pager = $('[data-pager]', board);
+    var per = parseInt(board.getAttribute('data-per') || '10', 10);
+    var listTop = $('.board-tools', board) || board;
+    var state = { cat: params.get('cat') || 'all', area: params.get('area') || 'all', q: '', page: 1 };
+    if (!filters.some(function (b) { return b.getAttribute('data-filter') === state.cat; })) state.cat = 'all';
+    if (area) {
+      area.value = state.area;
+      if (area.value !== state.area) { state.area = 'all'; area.value = 'all'; }
+    }
+    function match(el) {
+      if (state.cat !== 'all' && el.getAttribute('data-cat') !== state.cat) return false;
+      if (state.area !== 'all' && (' ' + el.getAttribute('data-area') + ' ').indexOf(' ' + state.area + ' ') < 0) return false;
+      if (state.q && el.getAttribute('data-text').indexOf(state.q) < 0) return false;
+      return true;
+    }
+    function button(label, page, opts) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      if (opts && opts.aria) b.setAttribute('aria-label', opts.aria);
+      if (opts && opts.current) b.setAttribute('aria-current', 'page');
+      if (opts && opts.disabled) b.disabled = true;
+      b.addEventListener('click', function () { state.page = page; render(true); });
+      return b;
+    }
+    function render(scroll) {
+      var list = items.filter(match);
+      var pages = Math.max(1, Math.ceil(list.length / per));
+      state.page = clamp(state.page, 1, pages);
+      items.forEach(function (el) { el.hidden = true; });
+      list.slice((state.page - 1) * per, state.page * per).forEach(function (el) { el.hidden = false; });
+      filters.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-filter') === state.cat ? 'true' : 'false'); });
+      if (count) count.innerHTML = '총 <b>' + list.length + '</b>개 글' + (pages > 1 ? ' · ' + state.page + ' / ' + pages + '쪽' : '');
+      if (empty) empty.hidden = list.length > 0;
+      if (pager) {
+        pager.innerHTML = '';
+        if (pages > 1) {
+          pager.appendChild(button('‹', state.page - 1, { aria: '이전 쪽', disabled: state.page === 1 }));
+          for (var i = 1; i <= pages; i++) pager.appendChild(button(String(i), i, { aria: i + '쪽', current: i === state.page }));
+          pager.appendChild(button('›', state.page + 1, { aria: '다음 쪽', disabled: state.page === pages }));
+        }
+      }
+      if (scroll) listTop.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+    filters.forEach(function (b) {
+      b.addEventListener('click', function () { state.cat = b.getAttribute('data-filter'); state.page = 1; render(); });
+    });
+    $$('[data-set-filter]', board).forEach(function (b) {
+      b.addEventListener('click', function () { state.cat = b.getAttribute('data-set-filter'); state.page = 1; render(true); });
+    });
+    if (area) area.addEventListener('change', function () { state.area = area.value; state.page = 1; render(); });
+    if (q) q.addEventListener('input', function () { state.q = q.value.trim().toLowerCase(); state.page = 1; render(); });
+    render(false);
+  });
+
+  /* ---------- 페이지 안 메뉴(서브 내비) 현재 위치 ---------- */
+  var subnav = $('[data-subnav]');
+  if (subnav && hasIO) {
+    var sLinks = $$('a[href^="#"]', subnav);
+    var sMap = {};
+    sLinks.forEach(function (a) { sMap[a.getAttribute('href').slice(1)] = a; });
+    var row = $('.container', subnav);
+    var sIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var a = sMap[en.target.id];
+        if (!a) return;
+        sLinks.forEach(function (l) { l.classList.remove('is-active'); l.removeAttribute('aria-current'); });
+        a.classList.add('is-active');
+        a.setAttribute('aria-current', 'location');
+        if (row && row.scrollWidth > row.clientWidth) row.scrollTo({ left: a.offsetLeft - row.clientWidth / 2 + a.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    Object.keys(sMap).forEach(function (id) { var s = document.getElementById(id); if (s) sIO.observe(s); });
+  }
+
   /* ---------- 상담 폼(시안: 전송하지 않음) ---------- */
+  function syncConditional(f) {
+    $$('[data-show-if]', f).forEach(function (box) {
+      var rule = box.getAttribute('data-show-if').split('=');
+      var picked = f.querySelector('[name="' + rule[0] + '"]:checked');
+      box.hidden = !(picked && picked.value === rule[1]);
+    });
+  }
+  function syncCounter(f) {
+    $$('[data-counter-for]', f).forEach(function (c) {
+      var ta = document.getElementById(c.getAttribute('data-counter-for'));
+      if (ta) c.textContent = fmt(ta.value.length) + ' / ' + fmt(parseInt(ta.getAttribute('maxlength') || '1000', 10));
+    });
+  }
   $$('form[data-mock-form]').forEach(function (f) {
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       var firstBad = null;
       $$('[required]', f).forEach(function (inp) {
-        var bad = inp.type === 'checkbox' ? !inp.checked : !String(inp.value).trim();
+        var bad;
+        if (inp.type === 'checkbox') bad = !inp.checked;
+        else if (inp.type === 'radio') bad = !f.querySelector('input[name="' + inp.name + '"]:checked');
+        else bad = !String(inp.value).trim();
         var wrap = inp.closest('.field, .check');
         if (wrap) wrap.classList.toggle('is-invalid', bad);
         if (bad && !firstBad) firstBad = inp;
       });
-      if (firstBad) { firstBad.focus(); toast('필수 항목을 확인해 주세요.'); return; }
+      if (firstBad) { firstBad.focus(); toast(f.getAttribute('data-msg-bad') || '필수 항목을 확인해 주세요.'); return; }
       f.reset();
-      toast('시안이라 실제로 전송되지는 않습니다. 실제 사이트에서는 접수 확인 메일이 발송됩니다.');
+      setTimeout(function () { syncConditional(f); syncCounter(f); }, 0);
+      toast(f.getAttribute('data-msg-ok') || '시안이라 실제로 전송되지는 않습니다. 실제 사이트에서는 접수 확인 메일이 발송됩니다.');
     });
-    f.addEventListener('input', function (e) {
+    function clear(e) {
       var wrap = e.target.closest('.field, .check');
       if (wrap) wrap.classList.remove('is-invalid');
-    });
+      syncConditional(f);
+      syncCounter(f);
+    }
+    f.addEventListener('input', clear);
+    f.addEventListener('change', clear);
+    syncConditional(f);
+    syncCounter(f);
   });
+
+  /* 비자 진단 결과에서 넘어온 경우 상담 신청서 채우기 */
+  (function prefill() {
+    var f = $('form[data-mock-form][data-prefill]');
+    if (!f) return;
+    var areaVal = params.get('area'), note = params.get('note');
+    var sel = f.querySelector('[name="area"]');
+    if (areaVal && sel) { sel.value = areaVal; if (sel.value !== areaVal) sel.value = ''; }
+    var msg = f.querySelector('[name="message"]');
+    if (note && msg) msg.value = note + '\n';
+    syncCounter(f);
+    if (note) toast('1분 비자 진단 결과로 상담 신청서를 채워 두었습니다.');
+  })();
 
   /* ---------- 링크 복사 ---------- */
   $$('[data-copy-link]').forEach(function (b) {
@@ -329,11 +473,11 @@
     { key: 'stage', q: '지금 상황에 가장 가까운 것은?', opts: [['new', '처음 알아보는 중이에요'], ['filed', '이미 서류를 냈어요 (진행 중)'], ['issue', '거절·지연·추가 서류 요청(RFE)을 받았어요']] }
   ];
   var R = {
-    family: { area: 'green', title: '이민비자·영주권 › 가족초청', text: '시민권자·영주권자 가족 초청, 배우자 초청, 신분조정(I-485) 또는 영사수속이 해당될 수 있습니다.', reads: ['시민권자 배우자 초청, 반드시 같이 살아야 하나요?', 'ESTA 입국 후 시민권자와 결혼, 영주권 승인 사례'] },
-    work: { area: 'green', title: '이민비자·영주권 › 취업이민', text: '취업이민(EB-2·EB-3), 국가이익면제(NIW), 간호사(RN) 취업이민, 취업비자(H-1B) 등이 해당될 수 있습니다.', reads: ['화학공학 석사 NIW 승인 사례', '승인된 취업비자, 연장 심사 강화 움직임'] },
-    study: { area: 'nonimm', title: '비이민비자 › 유학·투자', text: '학생비자(F-1)와 OPT, 소액투자비자(E-2), 주재원비자(L-1) 등이 해당될 수 있습니다.', reads: ['F-1 유학생 4년 체류 제한, 시행 중단에 대하여', 'OPT 수수료 인상 계획'] },
-    citizen: { area: 'citizen', title: '시민권 › 귀화 신청', text: '귀화 신청(N-400) 자격, 체류 기간, 인터뷰와 시험 준비가 해당될 수 있습니다.', reads: ['I-751 승인 전에 시민권을 신청할 수 있을까?', '미국 시민권 포기자의 ESTA 무비자 입국 제한'] },
-    defense: { area: 'defense', title: '추방재판·이민구제', text: '추방재판 대응, 웨이버(I-601·I-601A), 과거 기록 문제 검토가 필요할 수 있습니다. 기한이 있는 경우가 많아 빠른 상담을 권합니다.', reads: ['두 차례 영주권 거절 후, I-601 웨이버와 I-485', '20년 동안 가족을 돌본 아들, I-601 웨이버 승인 사례'] }
+    family: { area: 'green', anchor: 't-family', title: '이민비자·영주권 › 가족초청', text: '시민권자·영주권자 가족 초청, 배우자 초청, 신분조정(I-485) 또는 영사수속이 해당될 수 있습니다.', reads: ['시민권자 배우자 초청 - 반드시 같이 살아야 하나요?', 'ESTA(무비자) 입국 후 시민권자와 결혼 - 영주권 승인'] },
+    work: { area: 'green', anchor: 't-employment', title: '이민비자·영주권 › 취업이민', text: '취업이민(EB-2·EB-3), 국가이익면제(NIW), 간호사(RN) 취업이민, 취업비자(H-1B) 등이 해당될 수 있습니다.', reads: ['화학공학 석사학위 소지자 NIW 승인', '취업이민 영주권을 진행하려고 하는데요'] },
+    study: { area: 'nonimm', anchor: 't-student', title: '비이민비자 › 유학·투자', text: '학생비자(F-1)와 OPT, 소액투자비자(E-2), 주재원비자(L-1) 등이 해당될 수 있습니다.', reads: ['유학생비자 최대 4년, D/S제도 폐지', '유학생들의 취업이민 진행 시 유의사항'] },
+    citizen: { area: 'citizen', anchor: 't-n400', title: '시민권 › 귀화 신청', text: '귀화 신청(N-400) 자격, 체류 기간, 인터뷰와 시험 준비가 해당될 수 있습니다.', reads: ['영구영주권(정식영주권) 승인 없이 시민권 신청?', '비시민권자의 유권자 등록과 투표권 행사'] },
+    defense: { area: 'defense', anchor: 't-court', title: '추방재판·이민구제', text: '추방재판 대응, 웨이버(I-601·I-601A), 과거 기록 문제 검토가 필요할 수 있습니다. 기한이 있는 경우가 많아 빠른 상담을 권합니다.', reads: ['601 waiver 승인 케이스 공유', '20년 동안 가족을 돌본 아들, I-601 Waiver 승인 사례'] }
   };
   var AREA_LABEL = { green: '이민비자·영주권', nonimm: '비이민비자', citizen: '시민권', defense: '추방재판·이민구제' };
   var answers = {}, step = 0;
@@ -347,10 +491,10 @@
       var html = '<p class="quiz__step">STEP ' + (step + 1) + ' / ' + Q.length + '</p>' +
         '<h2 class="quiz__q" id="quiz-title">' + item.q + '</h2><div class="quiz__options">';
       item.opts.forEach(function (o) {
-        html += '<button type="button" class="quiz__opt" data-val="' + o[0] + '"><span>' + o[1] + '</span><svg class="ic"><use href="#i-arrow"/></svg></button>';
+        html += '<button type="button" class="quiz__opt" data-val="' + o[0] + '"><span>' + o[1] + '</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>';
       });
       html += '</div>';
-      if (step > 0) html += '<button type="button" class="quiz__back" data-quiz-back><svg class="ic"><use href="#i-arrow-left"/></svg>이전 질문</button>';
+      if (step > 0) html += '<button type="button" class="quiz__back" data-quiz-back><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg>이전 질문</button>';
       body.innerHTML = html;
       $$('.quiz__opt', body).forEach(function (b) {
         b.addEventListener('click', function () { answers[item.key] = b.getAttribute('data-val'); step++; renderQuiz(); });
@@ -362,52 +506,71 @@
     } else {
       bar.style.width = '100%';
       var res = R[answers.goal] || R.family;
+      var hub = HUB[res.area];
       var urgent = answers.stage === 'issue' || answers.goal === 'defense';
       var where = answers.where === 'kr' ? '한국에 계셔도 전화·화상·카카오톡으로 상담할 수 있습니다.' : (answers.where === 'etc' ? '해외에 계셔도 전화·화상 상담이 가능합니다.' : '로스앤젤레스 윌셔 사무실 방문 상담도 가능합니다.');
       var html2 = '<div class="quiz__result"><p class="quiz__step">진단 결과</p><h2 id="quiz-title">' + res.title + '</h2><p>' + res.text + ' ' + where + '</p>' +
-        (urgent ? '<p class="quiz__badge"><svg class="ic"><use href="#i-clock"/></svg>기한이 중요한 상황일 수 있어요. 빠른 상담을 권합니다.</p>' : '') +
-        '<div class="quiz__reads">' + res.reads.map(function (t) { return '<a href="#columns" data-quiz-close><svg class="ic"><use href="#i-doc"/></svg>' + t + '</a>'; }).join('') + '</div>' +
+        (urgent ? '<p class="quiz__badge"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>기한이 중요한 상황일 수 있어요. 빠른 상담을 권합니다.</p>' : '') +
+        '<div class="quiz__reads"><a href="' + hub + '#' + res.anchor + '"><svg class="ic" aria-hidden="true"><use href="#i-compass"/></svg>' + AREA_LABEL[res.area] + ' 안내 페이지 보기</a>' +
+        res.reads.map(function (t) { return '<a href="' + hub + '#related"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>' + t + '</a>'; }).join('') + '</div>' +
         '<div class="quiz__actions"><button type="button" class="btn btn--primary" data-quiz-apply>이 결과로 상담 신청</button><button type="button" class="btn btn--ghost" data-quiz-restart>다시 하기</button></div>' +
         '<p class="quiz__fine">간단한 안내이며 법률 자문이 아닙니다. 정확한 판단은 상담에서 사실관계를 확인한 뒤 드립니다.</p></div>';
       body.innerHTML = html2;
       $('[data-quiz-restart]', body).addEventListener('click', function () { answers = {}; step = 0; renderQuiz(); });
-      $$('[data-quiz-close]', body).forEach(function (a) { a.addEventListener('click', closeQuiz); });
       $('[data-quiz-apply]', body).addEventListener('click', function () {
+        var stage = (Q[2].opts.filter(function (o) { return o[0] === answers.stage; })[0] || ['', ''])[1];
+        var note = '[1분 비자 진단] ' + res.title + ' / ' + stage;
         var form = $('form[data-mock-form]');
-        if (form) {
-          var sel = form.querySelector('[name="area"]');
-          if (sel) sel.value = res.area;
-          var msg = form.querySelector('[name="message"]');
-          if (msg) msg.value = '[1분 비자 진단] ' + res.title + ' / ' + (Q[2].opts.filter(function (o) { return o[0] === answers.stage; })[0] || ['', ''])[1] + '\n';
+        var sel = form && form.querySelector('[name="area"]');
+        if (!sel) {
+          location.href = 'contact.html?area=' + res.area + '&note=' + encodeURIComponent(note) + '#form';
+          return;
         }
-        closeQuiz();
-        var target = $('#consult');
-        if (target) target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+        sel.value = res.area;
+        var msg = form.querySelector('[name="message"]');
+        if (msg) msg.value = note + '\n';
+        syncCounter(form);
+        closeQuiz(true);
+        (form.closest('section') || form).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
         toast(AREA_LABEL[res.area] + ' 상담으로 신청서를 채워 두었습니다.');
+        setTimeout(function () { var n = form.querySelector('[name="name"]'); if (n) n.focus({ preventScroll: true }); }, reduce ? 0 : 600);
       });
       $('[data-quiz-apply]', body).focus();
     }
   }
+  function quizOpen() { return quiz && quiz.classList.contains('is-open'); }
   function openQuiz(opener) {
     if (!quiz) return;
     lastOpener = opener || null;
     answers = {}; step = 0;
-    renderQuiz();
     quiz.classList.add('is-open');
     quiz.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    renderQuiz();
   }
-  function closeQuiz() {
-    if (!quiz || !quiz.classList.contains('is-open')) return;
+  function closeQuiz(keepFocus) {
+    if (!quizOpen()) return;
     quiz.classList.remove('is-open');
     quiz.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
-    if (lastOpener) lastOpener.focus();
+    if (lastOpener && !keepFocus) lastOpener.focus();
   }
-  $$('[data-quiz-open]').forEach(function (b) { b.addEventListener('click', function (e) { e.preventDefault(); openQuiz(b); }); });
+  $$('[data-quiz-open]').forEach(function (b) { b.addEventListener('click', function (e) { e.preventDefault(); setNav(false); openQuiz(b); }); });
   if (quiz) {
     quiz.addEventListener('click', function (e) { if (e.target === quiz || e.target.closest('[data-quiz-dismiss]')) closeQuiz(); });
   }
+
+  /* ---------- 키보드: Esc 닫기 · Tab 가두기 ---------- */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (quizOpen()) closeQuiz();
+      else setNav(false);
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    if (quizOpen()) trap($('.modal__panel', quiz), e);
+    else if (navOpen() && mnav) trap(mnav, e);
+  });
 
   /* ---------- 연도 ---------- */
   $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });

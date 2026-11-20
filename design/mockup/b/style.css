@@ -383,3 +383,54 @@
 .related-sec { background: var(--paper); border-top: 1px solid var(--line); }
 .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 @media (max-width: 900px) { .related { grid-template-columns: 1fr; gap: 30px; } }
+
+/* =====================================================================
+   서브 페이지 (assets/pages.css 가 쓰는 변수와 B안 장식)
+   ===================================================================== */
+:root {
+  --title-color: var(--green-900);
+  --icon-bg: var(--green-100);
+  --icon-fg: var(--green);
+  --band-bg: var(--green);
+  --band-fg: var(--cream);
+  --band-muted: rgba(245, 239, 230, .8);
+  --band-accent: var(--terra-light);
+  --band-line: rgba(255, 255, 255, .16);
+  --band-card: rgba(255, 255, 255, .07);
+  --ph-bg: var(--cream);
+  --ph-fg: var(--green-900);
+  --ph-muted: var(--muted);
+  --ph-accent: var(--accent-text);
+  --ph-em: var(--terra);
+  --ph-title-weight: 500;
+  --ph-card-bg: #FFFFFF;
+  --ph-card-line: var(--line);
+  --ph-photo-radius: 999px 999px 30px 30px;
+  --video-bg: linear-gradient(140deg, #2E5A4F, #0F241F 80%);
+  --video-bg-2: linear-gradient(140deg, #D27A52, #4A1F0E 85%);
+}
+.gnav a[aria-current="true"] { color: var(--accent-text); }
+.page-hero::before {
+  content: ""; position: absolute; z-index: -1; width: 720px; height: 720px; right: -240px; top: -320px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(200, 100, 59, .16), transparent); animation: drift 20s ease-in-out infinite alternate;
+}
+.page-hero::after {
+  content: ""; position: absolute; z-index: -1; width: 520px; height: 520px; left: -220px; bottom: -300px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(46, 90, 79, .14), transparent); animation: drift 26s ease-in-out infinite alternate-reverse;
+}
+.page-hero__title em { background: linear-gradient(transparent 68%, rgba(200, 100, 59, .2) 68%); padding: 0 .05em; }
+.ph-photo__img img { aspect-ratio: 4 / 5; }
+.ph-photo::after { content: ""; position: absolute; z-index: -1; right: -18px; bottom: -18px; width: 56%; height: 52%; border-radius: var(--radius-lg); background: var(--terra); opacity: .9; }
+.ph-card { box-shadow: var(--shadow-md); }
+.subnav { background: rgba(255, 253, 249, .94); }
+.brows { display: grid; gap: 10px; }
+.brow a { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 20px 22px; }
+.brow a:hover { padding-inline: 22px; background: #fff; border-color: var(--terra); transform: translateX(4px); box-shadow: var(--shadow-sm); }
+.brow time { font-weight: 500; }
+.board-count { border-top: 0; padding-top: 4px; }
+.post-rows, .sit-list, .cred, .info-list, .press-list { border-top-width: 1px; border-top-color: var(--line); }
+.who li, .type, .method, .channel, .prep__card, .link-grid a { box-shadow: var(--shadow-sm); }
+.flow li { background: #fff; }
+.filter[aria-pressed="true"], .pager button[aria-current="page"], .area-nav a[aria-current="page"] { background: var(--green); border-color: var(--green); }
+.cta-strip__card { background: linear-gradient(135deg, var(--green), var(--green-900)); }
+.col-board .col-card .col-card__sum { margin-top: -8px; }

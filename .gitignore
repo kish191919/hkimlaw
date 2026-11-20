@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# 배포용 빌드 결과 (design/mockup/_build/export.py 가 만든다)
+design/mockup/dist/
+
+# Vercel 프로젝트 연결 정보
+.vercel
