@@ -39,6 +39,7 @@ design/mockup/
 ├─ assets/
 │  ├─ base.css      공통 레이아웃·컴포넌트 (테마 변수는 각 시안 style.css에서 정의)
 │  ├─ pages.css     서브 페이지 공통 컴포넌트 (색은 시안 변수 --ph-*, --band-* 등을 씀)
+│  ├─ mobile.css    휴대폰(폭 640px 이하) 화면 정리. 모든 스타일 다음에 불러와 휴대폰에서만 덮어씀 (아래 참고)
 │  ├─ mockup.js     공통 인터랙션 (외부 라이브러리 없음)
 │  ├─ admin.css, admin.js  글쓰기 화면
 │  ├─ editbar.js    변호사님 글쓰기 바로가기 (로그인해 둔 브라우저에서만 왼쪽 아래 글쓰기·이 글 고치기 버튼)
@@ -116,6 +117,7 @@ for d in vk-proposal-a vk-proposal-b vk-proposal; do npx vercel@latest deploy --
 | 읽기 진행 막대, 목차 따라가기, 링크 복사 | 게시글 상세 | — |
 | 글쓰기: 게시판·유형 선택, 글 템플릿 4종, 사진 끌어다 놓기, 발행 전 확인, SNS 공유 키트 | write.html | 기획서 §8 |
 | 변호사 로그인 링크, 로그인한 브라우저에서만 보이는 글쓰기·게시판별 쓰기·이 글 고치기 버튼 | 모든 페이지 푸터, 왼쪽 아래 | 기획서 §8.2 |
+| 휴대폰 화면 정리: 여백·글자 한 단계 축소, 아이콘 왼쪽 카드, 승인 사례·방송 영상 옆으로 넘기기, 칩·게시판 분류 한 줄 가로 스크롤, 요약 2~3줄 자르기, 업무분야 세부 유형 '더 보기' | 공통 (`assets/mobile.css`) | — |
 | 모바일 메뉴·비자 진단 창의 포커스 가두기, Esc로 닫기 | 공통 | 접근성 |
 | 동작 줄이기 설정을 켠 사용자에게는 애니메이션 끄기 | 공통 | 접근성 |
 
@@ -140,7 +142,7 @@ for d in vk-proposal-a vk-proposal-b vk-proposal; do npx vercel@latest deploy --
 - **데이터베이스·권한:** `_build/supabase/schema.sql`(글·편집자·사진 저장소, 행 수준 보안)을 운영 저장소의 첫 마이그레이션으로 씁니다. 업무분야 분류는 `posts.hubs`·`posts.tags` 그대로입니다.
 - **페이지:** 생성기(`_build/build.py`)의 페이지 함수 하나가 Next.js 페이지 하나가 됩니다(`page_about` → `app/about/page.tsx` 등). 헤더·푸터·빠른 상담·비자 진단 창은 공통 레이아웃 컴포넌트로 옮깁니다.
 - **게시판·게시글:** 지금은 `live.js`가 브라우저에서 글을 불러와 채웁니다. 실제 사이트에서는 서버가 완성된 HTML을 내보내야 구글·네이버 수집과 카카오톡 미리보기가 글 내용을 읽습니다. `live.js`의 채우기 함수(`fillBoards`, `fillHubs`, `renderPost` 등)가 서버 컴포넌트가 되고, 주소는 `/news/번호`, `/column/번호`로 바꿉니다.
-- **색·글꼴:** `a/style.css`, `b/style.css` 맨 위 `:root` 변수를 그대로 가져갑니다. `assets/base.css`, `assets/pages.css`도 거의 그대로 씁니다.
+- **색·글꼴:** `a/style.css`, `b/style.css` 맨 위 `:root` 변수를 그대로 가져갑니다. `assets/base.css`, `assets/pages.css`도 거의 그대로 씁니다. `assets/mobile.css`는 반드시 가장 마지막에 불러옵니다(휴대폰 덮어쓰기). 시안별로 다른 휴대폰 규칙은 `html[data-theme="a"|"b"]`로 나눠 두었습니다.
 - **인터랙션:** 비자 진단, 경로 타임라인, 스카이라인 모션, 슬라이드는 `assets/mockup.js`의 해당 블록을 클라이언트 컴포넌트로 옮깁니다.
 - **글쓰기 화면:** `write.html`·`assets/admin.js`를 `/write` 페이지로 옮깁니다. 편집기는 브라우저 기본 기능(`execCommand`) 대신 유지보수되는 오픈소스 편집기(Tiptap 등)로 바꾸고, 저장 형식(정리된 HTML)은 그대로 둡니다.
 - **글쓰기 버튼:** `assets/editbar.js`와 같은 동작을 공통 레이아웃에 넣습니다. 실제 사이트에서는 로그인 정보를 쿠키로 두고 서버에서 편집자인지 확인한 뒤 버튼을 그립니다.

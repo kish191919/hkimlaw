@@ -238,7 +238,33 @@
       });
     });
   }
-  function layoutAll() { processes.forEach(layoutProcess); updateProcess(); }
+  /* ---------- 휴대폰: 업무분야 세부 유형 설명은 세 줄만 보이고 '더 보기'로 펼침 (mobile.css) ---------- */
+  var narrow = window.matchMedia('(max-width: 640px)');
+  var moreBtns = $$('.type > p').map(function (p) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'more-toggle';
+    btn.textContent = '더 보기';
+    btn.setAttribute('aria-expanded', 'false');
+    p.classList.add('is-clamp');
+    p.insertAdjacentElement('afterend', btn);
+    btn.addEventListener('click', function () {
+      var open = p.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? '접기' : '더 보기';
+    });
+    return btn;
+  });
+  // 세 줄 안에 다 들어가는 설명에는 버튼을 숨긴다
+  function syncMore() {
+    moreBtns.forEach(function (btn) {
+      var p = btn.previousElementSibling;
+      btn.hidden = !narrow.matches || (!p.classList.contains('is-open') && p.scrollHeight <= p.clientHeight + 2);
+    });
+  }
+  window.addEventListener('hashchange', syncMore); // 비자 칩으로 들어와 펼쳐졌던 유형이 다시 접힐 때
+
+  function layoutAll() { processes.forEach(layoutProcess); updateProcess(); syncMore(); }
 
   /* ---------- 탭 ---------- */
   $$('[data-tabs]').forEach(function (w) {

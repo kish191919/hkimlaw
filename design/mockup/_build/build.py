@@ -112,6 +112,7 @@ def head(t, title, desc, html_cls="", lang="ko", site="김형걸 이민법 변�
 <link rel="stylesheet" href="../assets/base.css">
 <link rel="stylesheet" href="../assets/pages.css">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../assets/mobile.css">
 </head>
 <body>
 <script src="../assets/icons.js"></script>

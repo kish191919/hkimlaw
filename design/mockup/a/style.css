@@ -231,6 +231,7 @@
 /* 비자·서류로 바로 찾기 (상황별 바로가기 아래) */
 .visa-finder { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .visa-finder__label { font-size: 14px; color: var(--muted); margin-right: 6px; }
+.visa-finder__chips { display: contents; } /* 데스크톱은 칩이 제목 옆으로 이어서 줄바꿈. 휴대폰은 mobile.css에서 한 줄 가로 스크롤 */
 .visa-chip {
   padding: 8px 15px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
   font-size: 14.5px; font-weight: 600; color: var(--navy); transition: border-color .2s, color .2s, background-color .2s;
