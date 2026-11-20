@@ -31,10 +31,37 @@ COLUMN_ART = {
 }
 
 
+# 칼럼 표지 사진: assets/covers/<이름>.webp (16:10, 가로 최대 1200px).
+# 블로그 대표 사진은 대부분 변호사님 사무실 사진이 반복돼서, 글 주제에 맞는 CC0(퍼블릭 도메인) 스톡 사진을 골랐다.
+# 출처는 assets/covers/CREDITS.md. 홈페이지에서 새로 쓴 글은 글쓰기 화면에서 올린 사진(cover_url)이 표지가 된다.
+COVERS = {
+    "601 waiver 승인 케이스 공유": "waiver-family",
+    "영주권 카드를 분실했다면: 재발급(I-90)과 임시 증명(ADIT)": "card-wallet",
+    "이민비자·영주권 인터뷰, 공적부조 관련 준비사항": "interview-documents",
+    "이민법 집행은 신중하게 해야 한다": "enforcement-gavel",
+    "영구영주권(정식영주권) 승인 없이 시민권 신청?": "citizenship-passport",
+    "취업이민 영주권을 진행하려고 하는데요": "employment-office",
+    "영주권 승인 사례 공유 - 10년의 기다림": "ten-years-sunrise",
+    "비시민권자의 유권자 등록과 투표권 행사": "voting-flag",
+    "시민권자 배우자 초청 - 반드시 같이 살아야 하나요?": "spouse-couple",
+    "601 waiver 승인 사례 공유": "waiver-park-family",
+    "RFE 없이 비자·영주권 신청서 거절": "rfe-paper-stack",
+    "글로벌 엔트리(Global Entry) 신청": "global-entry-kiosk",
+    "유학생들의 취업이민 진행 시 유의사항": "students-graduation",
+    "영주권 신체검사는 이민국 지정 병원에서": "medical-stethoscope",
+    "USCIS 메모 발표 후 이민국 인터뷰를 다녀왔습니다": "uscis-building",
+    "새로운 영주권 정책 메모에 대한 향후 전망": "policy-capitol",
+    "ESTA(무비자) 입국 후 시민권자와 결혼 - 영주권 승인": "esta-wedding",
+    "화학공학 석사학위 소지자 NIW 승인": "niw-lab",
+    "20년 동안 가족을 돌본 아들, I-601 Waiver 승인 사례": "waiver-caregiver",
+    "프로디 기록이 있는 시민권자 배우자, 영주권 승인": "prodee-couple",
+}
+
+
 def P(board, date, typ, title, summary, hubs, tags, src):
     """src: 'blog:<글 번호>' | 'cafe' | 'post'(시안 안의 게시글 화면)"""
     return dict(board=board, date=date, type=typ, title=title, sum=summary,
-                hubs=hubs, tags=tags, src=src)
+                hubs=hubs, tags=tags, src=src, cover=COVERS.get(title))
 
 
 POSTS = [
@@ -206,6 +233,35 @@ POSTS = [
 POSTS = [p for _, p in sorted(enumerate(POSTS), key=lambda t: (t[1]["date"], -t[0]), reverse=True)]
 
 KBS_POST = BLOG + "224287937161"
+
+# ---------------------------------------------------------------------------
+# 방송 출연 (KBS America News)
+# 영상: KBS America 유튜브 채널의 공개 영상. 블로그 'KBS America News' 글 7편의 방송 화면 캡처와
+# 영상 속 장면·길이를 맞춰 확인했다(2026-11-20). 포스터: assets/media/<poster>.webp
+# start/end(초): 뉴스 전체 영상이면 변호사님 인터뷰가 들어간 꼭지만 재생한다.
+# quote: 방송 자막에 나온 변호사님 말 그대로. en: 영문 홈(b/en.html)에 쓰는 제목 번역(방송은 한국어).
+# ---------------------------------------------------------------------------
+KBS = [
+    dict(date="2026.05.15", yt="tjaGpyGJyFg", start=297, end=437, poster="kbs-2026-05-15", featured=True,
+         title="유학생 OPT 축소 전망", en="Outlook: OPT cutbacks for international students", blog="224287937161",
+         quote="앞으로 관련 제도가 전반적으로 개정될 것으로 보입니다.",
+         note="KBS 8 News 전체 영상 가운데 이 꼭지(5:00–7:17)만 재생됩니다."),
+    dict(date="2019.04.22", yt="64yi3F0TMLs", poster="kbs-2019-04-22", featured=True,
+         title="마리화나 흡연, 관련업 종사해도 시민권 기각", en="Marijuana use or cannabis work can mean a citizenship denial", blog="221521109462",
+         quote="", note="마리화나 흡연·관련업 종사 기록이 시민권 심사에 미치는 영향을 해설했습니다."),
+    dict(date="2019.06.12", yt="Jyfcz2CHKhA", poster="kbs-2019-06-12", title="시민권 신청 적체 심화…‘영주권 연장’ 이중 부담", en="Citizenship backlog grows, adding the cost of green card renewal",
+         blog="221561659974",
+         quote="영주권이 만기 되기 전에 시민권을 신청할 것인지, 영주권을 갱신할 것인지를 고민하는 시기를 좀 더 일찍 하는 것이 비용 절감을 가져올 수 있습니다."),
+    dict(date="2019.03.04", yt="MOd2kKSNA1M", poster="kbs-2019-03-04", title="이민 심사 강화로 서류 적체 심화", en="Stricter reviews deepen immigration backlogs", blog="221481242901"),
+    dict(date="2018.10.31", yt="KOp2BiqZzDE", poster="kbs-2018-10-31", title="‘출생 시민권’ 폐지, 행정명령으론 힘들다", en="Ending birthright citizenship by executive order would be difficult", blog="221390604243"),
+    dict(date="2018.07.16", yt="g0En1G3Xaec", poster="kbs-2018-07-16", title="이민 신청 서류 미비시 ‘즉각 기각’", en="Incomplete filings now risk immediate denial", blog="221321211184"),
+    dict(date="2015.03.19", yt="NZ2gcLdnWIw", start=14, poster="kbs-2015-03-19", title="이슈 & 뉴스 ‘유학원 급습, 그 후’", en="Issue & News: after the raids on student agencies", blog="220305796524"),
+]
+KBS_RANGE = "%s–%s" % (KBS[-1]["date"][:4], KBS[0]["date"][:4])   # 2015–2026
+
+# 칼럼 기고·질문 답변 (출처를 확인한 것만)
+WORKINGUS_COLUMN = "https://www.workingus.com/forums/forum/columns/hgkim/"   # '김형걸의 이민법칼럼', 2008년 시작
+CAFE = "https://cafe.naver.com/hkimlaw"
 
 # ---------------------------------------------------------------------------
 # 업무분야 허브 (기획서 §6.4 템플릿)

@@ -13,34 +13,42 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   :root {
-    --ink: #1D1F22; --muted: #62666D; --line: #E4E0D8; --bg: #F6F4EF; --card: #FFFFFF;
+    --ink: #1D1F22; --muted: #62666D; --line: #E4E0D8; --bg: #F6F4EF; --card: #FFFFFF; --gold: #8A6A37;
     --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
     --serif: "Noto Serif KR", "Nanum Myeongjo", "AppleMyungjo", serif;
   }
   body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--bg); line-height: 1.7; word-break: keep-all; -webkit-font-smoothing: antialiased; }
   a { color: inherit; text-decoration: none; }
-  h1, h2, h3, p, ul { margin: 0; }
-  ul { padding: 0; list-style: none; }
+  h1, h2, h3, p, ul, ol { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
   .wrap { width: min(100% - 48px, 1200px); margin-inline: auto; }
   @media (max-width: 560px) { .wrap { width: calc(100% - 32px); } }
   :focus-visible { outline: 3px solid #3E7BFA; outline-offset: 3px; border-radius: 6px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .ic { width: 16px; height: 16px; flex: none; }
 
   header.top { padding-block: 26px; border-bottom: 1px solid var(--line); }
   header.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted); }
   header.top strong { color: var(--ink); letter-spacing: .14em; font-size: 12.5px; }
 
-  .intro { padding-block: clamp(48px, 7vw, 96px) clamp(36px, 5vw, 64px); }
-  .kicker { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: #8A6A37; }
+  .intro { padding-block: clamp(48px, 7vw, 96px) clamp(32px, 4.5vw, 56px); }
+  .kicker { font-size: 13px; font-weight: 700; letter-spacing: .18em; color: var(--gold); }
   .intro h1 { margin-top: 18px; font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 5vw, 62px); line-height: 1.22; letter-spacing: -.035em; }
-  .intro p { margin-top: 20px; max-width: 40em; font-size: clamp(16px, 1.4vw, 18.5px); color: var(--muted); }
+  .intro__lead { margin-top: 20px; max-width: 40em; font-size: clamp(16px, 1.4vw, 18.5px); color: var(--muted); }
+  .intro__hint { display: inline-flex; align-items: flex-start; gap: 10px; margin-top: 22px; padding: 12px 18px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); font-size: 15px; }
+  .intro__hint .ic { margin-top: 4px; color: var(--gold); }
 
-  .options { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 36px); }
-  @media (max-width: 900px) { .options { grid-template-columns: 1fr; } }
+  .options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 36px); }
+  @media (max-width: 900px) { .options { grid-template-columns: minmax(0, 1fr); } }
   .opt { background: var(--card); border: 1px solid var(--line); border-radius: 26px; padding: 14px 14px 28px; box-shadow: 0 30px 70px -40px rgba(20, 20, 30, .35); }
   .preview { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 18px; background: #E9E5DD; }
   .preview iframe { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; pointer-events: none; }
-  .preview__link { position: absolute; inset: 0; z-index: 2; }
-  .preview__badge { position: absolute; left: 14px; top: 14px; z-index: 3; padding: 6px 12px; border-radius: 999px; background: rgba(0, 0, 0, .72); color: #fff; font-size: 12.5px; font-weight: 700; pointer-events: none; }
+  .preview::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); background: rgba(10, 14, 20, 0); transition: background .25s; pointer-events: none; }
+  .preview:hover::after, .preview:focus-within::after { background: rgba(10, 14, 20, .28); }
+  .preview__link { position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+  .preview__open { position: absolute; right: 14px; bottom: 14px; z-index: 2; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgba(0, 0, 0, .74); color: #fff; font-size: 13px; font-weight: 700; pointer-events: none; transition: transform .25s, background .25s; }
+  .preview:hover .preview__open, .preview:focus-within .preview__open { transform: scale(1.06); background: #000; }
+  .preview__open .ic { width: 14px; height: 14px; }
   .opt__body { padding: 26px 14px 0; }
   .opt__label { font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--muted); }
   .opt h2 { margin-top: 8px; font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.02em; }
@@ -49,25 +57,45 @@
   .sw { display: grid; gap: 6px; justify-items: center; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .sw span { width: 46px; height: 46px; border-radius: 14px; border: 1px solid rgba(0, 0, 0, .08); }
   .meta { margin-top: 20px; display: grid; gap: 8px; font-size: 14.5px; }
-  .meta li { display: grid; grid-template-columns: 76px 1fr; gap: 12px; }
+  .meta li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; }
+  .meta span { overflow-wrap: anywhere; }
   .meta b { color: var(--muted); font-weight: 600; }
   .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 999px; font-weight: 700; font-size: 15.5px; border: 1.5px solid var(--ink); transition: transform .2s; }
   .btn:hover { transform: translateY(-2px); }
   .btn--a { background: #13294B; border-color: #13294B; color: #fff; }
   .btn--b { background: #1F3D36; border-color: #1F3D36; color: #fff; }
-  .btn svg { width: 16px; height: 16px; }
+  .pages { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; border-top: 1px solid var(--line); }
+  .pages a { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: 14.5px; font-weight: 600; }
+  .pages a::after { content: "↗"; color: var(--muted); transition: transform .2s; }
+  .pages a:hover::after { transform: translate(2px, -2px); }
+  @media (max-width: 480px) { .pages { grid-template-columns: 1fr; } }
 
   section.block { padding-block: clamp(56px, 7vw, 96px) 0; }
   .block h2.title { font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 3vw, 38px); letter-spacing: -.02em; }
   .block p.sub { margin-top: 10px; color: var(--muted); }
+
+  .writer { padding: clamp(26px, 4vw, 48px); border-radius: 26px; background: #1D2327; color: #F0F0F1; }
+  .writer .kicker { color: #D9BE8C; }
+  .writer h2 { margin-top: 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.8vw, 34px); line-height: 1.3; letter-spacing: -.02em; }
+  .writer__lead { margin-top: 12px; max-width: 46em; color: rgba(240, 240, 241, .78); }
+  .wsteps { margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: ws; }
+  @media (max-width: 860px) { .wsteps { grid-template-columns: 1fr; } }
+  .wsteps li { counter-increment: ws; padding: 20px 22px; border-radius: 18px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .1); }
+  .wsteps li::before { content: counter(ws); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #D9BE8C; color: #1D2327; font-size: 14px; font-weight: 800; }
+  .wsteps b { display: block; margin-top: 12px; font-size: 16.5px; }
+  .wsteps span { display: block; margin-top: 6px; font-size: 14.5px; line-height: 1.65; color: rgba(240, 240, 241, .74); }
+  .writer__foot { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
+  .writer__foot p { flex: 1 1 22em; font-size: 14px; color: rgba(240, 240, 241, .66); }
+  .btn--ink { background: #fff; color: #1D2327; border-color: #fff; }
+
   .grid { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
   @media (max-width: 980px) { .grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
   .feat { padding: 22px; border-radius: 18px; background: var(--card); border: 1px solid var(--line); }
   .feat h3 { font-size: 16.5px; letter-spacing: -.01em; }
   .feat p { margin-top: 6px; font-size: 14.5px; color: var(--muted); line-height: 1.6; }
-  .feat small { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: #8A6A37; }
+  .feat small { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--gold); }
   .check { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 32px; }
   @media (max-width: 760px) { .check { grid-template-columns: 1fr; } }
   .check li { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
@@ -76,21 +104,15 @@
   .check span { color: var(--muted); font-size: 14.5px; }
   .tips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
   .tips li { padding: 10px 16px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-size: 14.5px; }
-  .pages { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; border-top: 1px solid var(--line); }
-  .pages a { display: flex; justify-content: space-between; align-items: center; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: 14.5px; font-weight: 600; }
-  .pages a::after { content: "→"; color: var(--muted); transition: transform .2s; }
-  .pages a:hover::after { transform: translateX(3px); }
-  @media (max-width: 480px) { .pages { grid-template-columns: 1fr; } }
-  .writer { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 40px; align-items: center; padding: clamp(26px, 4vw, 44px); border-radius: 26px; background: #1D2327; color: #F0F0F1; }
-  .writer .kicker { color: #D9BE8C; }
-  .writer h2 { margin-top: 12px; font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.8vw, 34px); line-height: 1.3; letter-spacing: -.02em; }
-  .writer p:not(.kicker) { margin-top: 12px; max-width: 42em; color: rgba(240, 240, 241, .78); }
-  .btn--ink { background: #fff; color: #1D2327; border-color: #fff; }
-  @media (max-width: 760px) { .writer { grid-template-columns: 1fr; } }
   footer.foot { margin-top: clamp(64px, 8vw, 110px); padding-block: 28px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { .btn, .preview::after, .preview__open, .pages a::after { transition: none; } }
 </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
   <header class="top">
     <div class="wrap"><strong>DESIGN PROPOSAL</strong><span>Law Offices of Vincent Kim · 2026.11</span></div>
   </header>
@@ -100,21 +122,22 @@
       <div class="wrap">
         <p class="kicker">홈페이지 디자인 시안</p>
         <h1>김형걸 변호사님 홈페이지,<br>두 가지 방향을 준비했습니다</h1>
-        <p>말씀하신 메뉴 6개(홈·변호사 소개·업무분야·이민법소식·전문가칼럼·상담안내)를 모두 실제 페이지로 만들었습니다. 두 시안은 분위기뿐 아니라 구성도 다릅니다. A는 상황별로 필요한 안내를 바로 찾는 정보 중심, B는 변호사님 한 분이 주인공인 1인 브랜드 중심입니다. 이민법 소식과 칼럼 목록에는 변호사님이 블로그·카페에 쓰신 실제 글을 넣었습니다. PC와 휴대폰에서 둘러보시고 마음에 드는 쪽을 골라 주세요. 섞어서 쓰는 것도 가능합니다.</p>
+        <p class="intro__lead">말씀하신 메뉴 6개(홈·변호사 소개·업무분야·이민법소식·전문가칼럼·상담안내)를 두 시안 모두 실제 페이지로 만들었습니다. A는 상황별로 필요한 안내를 바로 찾는 정보 중심, B는 변호사님 한 분이 주인공인 1인 브랜드 중심입니다. 게시판에는 블로그·카페에 쓰신 실제 글 53편을, 변호사 소개에는 KBS America 출연 영상 7편을 넣었습니다. 글쓰기 화면도 실제로 동작해서, 직접 쓰신 글이 두 시안에 바로 실립니다.</p>
+        <p class="intro__hint"><svg class="ic" aria-hidden="true"><use href="#i-out"/></svg><span>시안을 누르면 새 창으로 열립니다. 이 화면은 그대로 남아 있으니 두 시안을 오가며 비교해 보세요. 한쪽을 고르셔도 되고, 섞어서 쓰셔도 됩니다.</span></p>
       </div>
     </section>
 
     <div class="wrap options">
       <article class="opt">
         <div class="preview" data-preview>
-          <span class="preview__badge">시안 A</span>
-          <iframe src="a/index.html?embed" title="시안 A 미리보기" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <a class="preview__link" href="a/index.html" aria-label="시안 A 메인 화면 열기"></a>
+          <iframe src="a/index.html?embed" title="시안 A 미리보기" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+          <span class="preview__open" aria-hidden="true">새 창에서 열기 <svg class="ic"><use href="#i-out"/></svg></span>
+          <a class="preview__link" href="a/index.html" target="_blank" rel="noopener" aria-label="시안 A 홈 화면 새 창으로 열기"></a>
         </div>
         <div class="opt__body">
           <p class="opt__label">OPTION A</p>
           <h2>Wilshire Editorial</h2>
-          <p class="opt__desc">격식과 신뢰. 지금 카페 배너의 네이비·골드를 이어받고, 큰 명조체 제목과 LA 야경 모션으로 첫 화면에 무게감을 줍니다.</p>
+          <p class="opt__desc">격식과 신뢰. 지금 카페 배너의 네이비·골드를 이어받고, 큰 명조체 제목과 LA 야경 모션으로 첫 화면에 무게감을 줍니다. 홈은 여섯 구역으로 간결하게 두고, 자세한 내용은 각 페이지에서 안내합니다.</p>
           <div class="swatches" aria-label="색상">
             <div class="sw"><span style="background:#13294B"></span>#13294B</div>
             <div class="sw"><span style="background:#B08D57"></span>#B08D57</div>
@@ -123,27 +146,28 @@
           </div>
           <ul class="meta">
             <li><b>글꼴</b><span>제목 Noto Serif KR · 본문 Pretendard</span></li>
-            <li><b>첫 화면</b><span>전면 영상(시안에서는 야경 모션) + 변호사 프로필 카드</span></li>
-            <li><b>구성</b><span>정보 중심: 상황별 바로가기 6개 → 업무분야 → 이민법 소식·칼럼 → 상담</span></li>
+            <li><b>첫 화면</b><span>전면 영상(시안에서는 LA 야경 모션) + 변호사 사진 카드</span></li>
+            <li><b>홈 구성</b><span>6개 구역: 히어로 → 숫자 띠 → 상황별 바로가기·비자 이름으로 찾기 → 이민법 소식·이달의 영주권 문호·칼럼 → 승인 사례 → 상담 신청</span></li>
+            <li><b>강점</b><span>처음 오신 분도 내 상황을 골라 맞는 안내로 바로 갑니다</span></li>
             <li><b>참고</b><span>Boundless, WR Immigration, Fragomen</span></li>
           </ul>
           <div class="btns">
-            <a class="btn btn--a" href="a/index.html">메인 화면 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></a>
+            <a class="btn btn--a" href="a/index.html" target="_blank" rel="noopener">시안 A 열기<span class="sr-only"> (새 창)</span> <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg></a>
           </div>
-          <ul class="pages" aria-label="시안 A 페이지"><li><a href="a/about.html">변호사 소개</a></li><li><a href="a/practice.html">업무분야</a></li><li><a href="a/practice-green-card.html">업무분야 상세 (영주권)</a></li><li><a href="a/news.html">이민법 소식 게시판</a></li><li><a href="a/column.html">전문가 칼럼 게시판</a></li><li><a href="a/post.html">게시글 화면</a></li><li><a href="a/contact.html">상담 안내·신청서</a></li><li><a href="a/en.html" lang="en">English</a></li></ul>
+          <ul class="pages" aria-label="시안 A 페이지 (새 창으로 열림)"><li><a href="a/about.html" target="_blank" rel="noopener">변호사 소개·방송 출연</a></li><li><a href="a/practice.html" target="_blank" rel="noopener">업무분야</a></li><li><a href="a/practice-green-card.html" target="_blank" rel="noopener">업무분야 상세 (영주권)</a></li><li><a href="a/news.html" target="_blank" rel="noopener">이민법 소식 게시판</a></li><li><a href="a/column.html" target="_blank" rel="noopener">전문가 칼럼 게시판</a></li><li><a href="a/post.html" target="_blank" rel="noopener">게시글 화면</a></li><li><a href="a/contact.html" target="_blank" rel="noopener">상담 안내·신청서</a></li><li><a href="a/en.html" target="_blank" rel="noopener" lang="en">English</a></li></ul>
         </div>
       </article>
 
       <article class="opt">
         <div class="preview" data-preview>
-          <span class="preview__badge">시안 B</span>
-          <iframe src="b/index.html?embed" title="시안 B 미리보기" loading="lazy" tabindex="-1" aria-hidden="true"></iframe>
-          <a class="preview__link" href="b/index.html" aria-label="시안 B 메인 화면 열기"></a>
+          <iframe src="b/index.html?embed" title="시안 B 미리보기" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+          <span class="preview__open" aria-hidden="true">새 창에서 열기 <svg class="ic"><use href="#i-out"/></svg></span>
+          <a class="preview__link" href="b/index.html" target="_blank" rel="noopener" aria-label="시안 B 홈 화면 새 창으로 열기"></a>
         </div>
         <div class="opt__body">
           <p class="opt__label">OPTION B</p>
           <h2>Personal Counsel</h2>
-          <p class="opt__desc">변호사님 한 분이 주인공인 사이트. 첫 화면 전체에 변호사님 사진과 전화번호를 크게 두고, 영상 칼럼·직접 쓰신 칼럼·승인 사례로 신뢰를 쌓습니다. 업무는 ‘신분을 얻는 일’과 ‘신분을 지키는 일’ 두 갈래로 나눴습니다.</p>
+          <p class="opt__desc">변호사님 한 분이 주인공인 사이트. 첫 화면 전체에 변호사님 사진과 전화번호를 크게 두고, 직접 쓰신 칼럼·영상 칼럼·승인 사례 이야기로 신뢰를 쌓습니다. 업무는 ‘신분을 얻는 일’과 ‘신분을 지키는 일’ 두 갈래로 나눴습니다.</p>
           <div class="swatches" aria-label="색상">
             <div class="sw"><span style="background:#1F3D36"></span>#1F3D36</div>
             <div class="sw"><span style="background:#C8643B"></span>#C8643B</div>
@@ -152,28 +176,35 @@
           </div>
           <ul class="meta">
             <li><b>글꼴</b><span>제목 Noto Serif KR · 본문 Pretendard</span></li>
-            <li><b>첫 화면</b><span>전체 폭 변호사 사진 + 큰 전화번호</span></li>
-            <li><b>구성</b><span>1인 브랜드: 변호사 소개·주요 업무 → 두 갈래 업무분야 → 영상·소식·칼럼 → 승인 사례 → 상담</span></li>
+            <li><b>첫 화면</b><span>전체 폭 변호사 사진 + 큰 전화번호 + 방송 출연·한국어·영어 상담 띠</span></li>
+            <li><b>홈 구성</b><span>소개·주요 업무 → 두 갈래 업무분야 → 숫자로 보는 20년 → 영상 칼럼 → 소식·영주권 문호 → 칼럼 → 일하는 방식 → 승인 사례 이야기 → 간단 문의</span></li>
+            <li><b>강점</b><span>변호사님 얼굴과 이야기가 먼저 보여, 직접 챙긴다는 믿음을 줍니다</span></li>
             <li><b>참고</b><span>변호사님이 주신 jkparklaw.com·kfreemanlawoffice.com, Elyon Legal</span></li>
           </ul>
           <div class="btns">
-            <a class="btn btn--b" href="b/index.html">메인 화면 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></a>
+            <a class="btn btn--b" href="b/index.html" target="_blank" rel="noopener">시안 B 열기<span class="sr-only"> (새 창)</span> <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg></a>
           </div>
-          <ul class="pages" aria-label="시안 B 페이지"><li><a href="b/about.html">변호사 소개</a></li><li><a href="b/practice.html">업무분야</a></li><li><a href="b/practice-green-card.html">업무분야 상세 (영주권)</a></li><li><a href="b/news.html">이민법 소식 게시판</a></li><li><a href="b/column.html">전문가 칼럼 게시판</a></li><li><a href="b/post.html">게시글 화면</a></li><li><a href="b/contact.html">상담 안내·신청서</a></li><li><a href="b/en.html" lang="en">English</a></li></ul>
+          <ul class="pages" aria-label="시안 B 페이지 (새 창으로 열림)"><li><a href="b/about.html" target="_blank" rel="noopener">변호사 소개·방송 출연</a></li><li><a href="b/practice.html" target="_blank" rel="noopener">업무분야</a></li><li><a href="b/practice-green-card.html" target="_blank" rel="noopener">업무분야 상세 (영주권)</a></li><li><a href="b/news.html" target="_blank" rel="noopener">이민법 소식 게시판</a></li><li><a href="b/column.html" target="_blank" rel="noopener">전문가 칼럼 게시판</a></li><li><a href="b/post.html" target="_blank" rel="noopener">게시글 화면</a></li><li><a href="b/contact.html" target="_blank" rel="noopener">상담 안내·신청서</a></li><li><a href="b/en.html" target="_blank" rel="noopener" lang="en">English</a></li></ul>
         </div>
       </article>
     </div>
 
-    <section class="block">
+    <section class="block" aria-labelledby="writer-title">
       <div class="wrap">
-        <a class="writer" href="write.html">
-          <div>
-            <p class="kicker">변호사님이 직접 쓰는 화면</p>
-            <h2>카페에 쓰시던 것처럼, 홈페이지에 바로 씁니다</h2>
-            <p>게시판을 고르고, 글을 쓰고, 업무분야와 3줄 요약을 체크하면 끝입니다. 매달 쓰시는 ‘영주권 문호’는 표 양식이 미리 들어 있습니다. 발행하면 카페·블로그·오픈카톡에 올릴 문구가 자동으로 만들어집니다.</p>
+        <div class="writer">
+          <p class="kicker">직접 써 보실 수 있습니다 · 시연판</p>
+          <h2 id="writer-title">카페에 쓰시던 것처럼, 홈페이지에 바로 씁니다</h2>
+          <p class="writer__lead">글쓰기 화면은 실제로 동작합니다. 여기서 발행하신 글은 시안 A·B의 게시판과 홈 화면, 맨 위 소식 띠, 업무분야 페이지의 ‘관련 글’에 바로 실립니다.</p>
+          <ol class="wsteps">
+            <li><b>로그인</b><span>시안 맨 아래 ‘변호사 로그인’을 누르면 글쓰기 화면이 열립니다. 한 번 로그인하면 그 기기에서는 로그인이 유지됩니다.</span></li>
+            <li><b>쓰기</b><span>게시판을 고르고 글을 쓴 뒤, 업무분야와 3줄 요약을 체크합니다. 사진은 끌어다 놓으면 크기가 자동으로 맞춰지고, ‘영주권 문호’는 표 양식이 미리 들어 있습니다.</span></li>
+            <li><b>발행</b><span>‘발행하기’를 누르면 바로 실리고, 카페·블로그·오픈카톡에 올릴 문구가 자동으로 만들어집니다. 로그인해 두시면 어느 화면에서나 ‘글쓰기’, 글 화면에는 ‘이 글 고치기’ 버튼이 보입니다.</span></li>
+          </ol>
+          <div class="writer__foot">
+            <a class="btn btn--ink" href="write.html" target="_blank" rel="noopener">글쓰기 화면 열기<span class="sr-only"> (새 창)</span> <svg class="ic" aria-hidden="true"><use href="#i-out"/></svg></a>
+            <p>시연용 아이디와 비밀번호는 따로 보내 드립니다. 임시 저장·예약 발행·수정·삭제도 해 보실 수 있고, 시험으로 올린 글은 직접 지우셔도 됩니다.</p>
           </div>
-          <span class="btn btn--ink">글쓰기 화면 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg></span>
-        </a>
+        </div>
       </div>
     </section>
 
@@ -182,18 +213,18 @@
         <h2 class="title">두 시안에 공통으로 들어간 것</h2>
         <p class="sub">화면을 직접 눌러 보며 확인해 보세요.</p>
         <div class="grid">
-          <div class="feat"><h3>메뉴 6개 모두 실제 페이지</h3><p>홈, 변호사 소개, 업무분야, 이민법소식, 전문가칼럼, 상담안내를 각각 눌러 볼 수 있습니다.</p><small>의뢰 메일 요청 사항</small></div>
-          <div class="feat"><h3>업무분야 페이지 4개</h3><p>대상, 세부 유형, 절차, 준비 서류, 자주 묻는 질문, 관련 글을 한 페이지에 정리했습니다.</p><small>업무분야 구성 제안</small></div>
+          <div class="feat"><h3>메뉴 6개 모두 실제 페이지</h3><p>홈, 변호사 소개, 업무분야, 이민법소식, 전문가칼럼, 상담안내를 시안마다 각각 눌러 볼 수 있습니다.</p><small>의뢰 메일 요청 사항</small></div>
+          <div class="feat"><h3>업무분야 페이지 4개</h3><p>영주권·비이민비자·시민권·추방재판마다 대상, 세부 유형, 절차, 준비 서류, 자주 묻는 질문, 관련 글을 한 페이지에 정리했습니다.</p><small>업무분야 구성 제안</small></div>
           <div class="feat"><h3>실제 글로 채운 게시판</h3><p>블로그·카페 글 53편을 소식과 칼럼으로 나눴습니다. 분류·업무분야·검색으로 찾을 수 있습니다.</p><small>2026년 3~11월 글</small></div>
-          <div class="feat"><h3>영문 페이지</h3><p>시민권자 배우자와 미국 회사 인사 담당자를 위한 영문 안내입니다. 상단 EN을 눌러 보세요.</p><small>Korean &amp; English</small></div>
-          <div class="feat"><h3>최신 소식 띠</h3><p>맨 위에 가장 최근 이민법 소식이 돌아가며 표시됩니다.</p><small>Fragomen 참고</small></div>
+          <div class="feat"><h3>업무분야별 글 자동 연결</h3><p>글을 쓸 때 업무분야만 고르면 해당 업무분야 페이지에 ‘관련 글’로 쌓입니다.</p><small>기획 제안</small></div>
+          <div class="feat"><h3>KBS 방송 출연 영상</h3><p>2015년부터 출연하신 KBS America 뉴스 7편을 변호사 소개에 모았습니다. 포스터를 누르면 그 자리에서 재생됩니다.</p><small>KBS America 공개 영상</small></div>
+          <div class="feat"><h3>칼럼 표지 사진</h3><p>칼럼마다 주제에 맞는 사진을 붙였습니다. 글쓰기 화면에서 사진을 올리시면 그 사진이 표지가 됩니다.</p><small>무료 사용 사진 20장</small></div>
+          <div class="feat"><h3>최신 소식 띠·이달의 영주권 문호</h3><p>맨 위에는 최근 이민법 소식이 돌아가며 나오고, 홈에는 매달 올리시는 영주권 문호 글을 따로 고정해 보여 줍니다.</p><small>Fragomen·iminusa 참고</small></div>
           <div class="feat"><h3>1분 비자 진단</h3><p>질문 세 개로 해당 업무분야와 읽을 글을 안내하고, 상담 신청서까지 채워 줍니다.</p><small>SimVisa·Alma 참고</small></div>
-          <div class="feat"><h3>이달의 영주권 문호</h3><p>매달 올리시는 영주권 문호 글을 홈 화면에 고정해 보여 줍니다.</p><small>iminusa 참고</small></div>
-          <div class="feat"><h3>업무분야별 글 자동 연결</h3><p>글을 쓸 때 업무분야만 고르면 해당 분야에 관련 글로 쌓입니다.</p><small>기획 제안</small></div>
-          <div class="feat"><h3>상담 절차 타임라인</h3><p>상담 안내 페이지(A는 홈에도)에서 스크롤하면 상담 단계가 차례로 그려집니다.</p><small>Alma 참고</small></div>
-          <div class="feat"><h3>1분 이민법 영상</h3><p>앞으로 만드실 유튜브 영상이 자동으로 표시될 자리입니다. A는 세로 숏츠, B는 가로 영상 칼럼입니다.</p><small>Hacking Immigration Law 참고</small></div>
-          <div class="feat"><h3>모바일 하단 상담 버튼</h3><p>휴대폰 화면 아래에 카톡 상담·빠른 상담·전화가 늘 보입니다.</p><small>대륜 국제이민부 참고</small></div>
-          <div class="feat"><h3>법적 고지·개인정보 동의</h3><p>승인 사례 면책 문구, 상담 폼 동의, 책임 변호사 표기를 넣었습니다.</p><small>캘리포니아 광고 규정 반영</small></div>
+          <div class="feat"><h3>상담 안내 한 곳에</h3><p>상담 절차, 상담료, 운영 시간, 오시는 길, 자주 묻는 질문을 상담 안내 페이지에 모았습니다. 스크롤하면 상담 단계가 차례로 그려집니다.</p><small>Alma 참고</small></div>
+          <div class="feat"><h3>영문 페이지</h3><p>시민권자 배우자와 미국 회사 인사 담당자를 위한 영문 안내입니다. 위쪽 EN을 눌러 보세요.</p><small>Korean &amp; English</small></div>
+          <div class="feat"><h3>휴대폰 하단 상담 버튼</h3><p>휴대폰 화면 아래에 카톡 상담·빠른 상담·전화가 늘 보입니다. PC에서는 오른쪽에 빠른 상담 메뉴가 붙어 있습니다.</p><small>대륜 국제이민부 참고</small></div>
+          <div class="feat"><h3>법적 고지·개인정보 동의</h3><p>승인 사례 면책 문구, 상담 신청서 동의, 책임 변호사 표기를 넣었습니다.</p><small>캘리포니아 광고 규정 반영</small></div>
         </div>
       </div>
     </section>
@@ -203,14 +234,16 @@
         <h2 class="title">확인 부탁드리는 내용</h2>
         <p class="sub">시안에는 예시로 넣어 두었습니다. 알려 주시면 정확하게 반영하겠습니다.</p>
         <ul class="check">
-          <li><div><b>사진</b><span>카페에 올리신 사무실 사진을 시안에 임시로 썼습니다. 사용해도 될지, 전문 촬영을 할지 알려 주세요.</span></div></li>
+          <li><div><b>사진</b><span>카페에 올리신 사무실 사진을 시안에 임시로 썼습니다. 사용해도 될지, 전문 촬영을 할지 알려 주세요. 칼럼 표지는 주제에 맞춘 무료 사진이라, 직접 고르신 사진으로 바꿀 수 있습니다.</span></div></li>
           <li><div><b>숫자 표기</b><span>이민법 20년, 글 1,500편 이상, 카페 회원 2,100명 이상을 홈페이지에 써도 될지 확인 부탁드립니다.</span></div></li>
+          <li><div><b>약력</b><span>학력·자격·소속 단체와 실무를 시작하신 해는 ‘확인 필요’로 비워 두었습니다. 프로필 자료를 보내 주시면 채우겠습니다.</span></div></li>
+          <li><div><b>방송·기고</b><span>KBS America 출연 영상 7편(2015–2026)과 2008년부터 이어 온 workingUS 칼럼을 넣었습니다. 빠진 출연이나 다른 기고 이력이 있으면 알려 주세요.</span></div></li>
           <li><div><b>운영 시간·상담료</b><span>운영 시간과 상담료 정책(유료·무료, 수임 시 차감 여부)을 알려 주세요.</span></div></li>
           <li><div><b>상담 방식·언어</b><span>방문·전화·화상·카카오톡 상담 가능 여부와 한국어·영어 상담 표기를 확인해 주세요.</span></div></li>
-          <li><div><b>승인 사례</b><span>카페·블로그의 승인 사례를 홈페이지에 실어도 될지, 익명화 기준과 함께 알려 주세요.</span></div></li>
-          <li><div><b>방송 자료</b><span>KBS America 출연 영상·사진을 쓸 수 있는지, 다른 출연·기고 이력이 있는지 알려 주세요.</span></div></li>
-          <li><div><b>카카오톡</b><span>상담에 쓸 카카오톡 채널이나 오픈채팅 링크를 알려 주세요.</span></div></li>
-          <li><div><b>후기·영상</b><span>후기와 숏츠·영상 칼럼은 자리만 잡아 둔 예시입니다. 실제 내용이 생기면 자동으로 채워집니다.</span></div></li>
+          <li><div><b>카카오톡</b><span>시안에는 카카오톡 ID(hkimlaw16)를 넣었습니다. 상담용 카카오톡 채널이나 오픈채팅 링크가 따로 있으면 알려 주세요.</span></div></li>
+          <li><div><b>승인 사례</b><span>블로그에 공개하신 승인 사례를 넣었습니다. 홈페이지에 실어도 될지, 익명화 기준과 함께 알려 주세요.</span></div></li>
+          <li><div><b>업무분야 원고</b><span>업무분야 페이지의 글은 일반 정보 수준의 초안입니다. 수수료·처리 기간 같은 숫자는 적지 않고 공식 페이지로 연결했습니다. 게시 전에 검토 부탁드립니다.</span></div></li>
+          <li><div><b>후기·영상 칼럼</b><span>고객 후기와 1분 이민법 영상은 자리만 잡아 둔 예시입니다(영상 칼럼은 B 홈에 있고, A는 유튜브 채널을 연 뒤 홈에 더합니다). 구글 후기와 유튜브를 연결하면 자동으로 채워집니다.</span></div></li>
         </ul>
       </div>
     </section>
@@ -219,11 +252,13 @@
       <div class="wrap">
         <h2 class="title">보는 방법</h2>
         <ul class="tips">
-          <li>PC에서 창 폭을 줄이면 휴대폰 화면으로 바뀝니다</li>
+          <li>시안은 새 창으로 열립니다. 이 화면으로 돌아와 다른 시안을 열어 비교해 보세요</li>
+          <li>휴대폰으로 이 주소를 열거나, PC에서 창 폭을 줄이면 휴대폰 화면이 됩니다</li>
           <li>위쪽 메뉴를 눌러 페이지를 옮겨 다녀 보세요</li>
           <li>‘1분 비자 진단’ 결과는 상담 신청서로 이어집니다</li>
+          <li>변호사 소개의 방송 포스터를 누르면 영상이 재생됩니다</li>
           <li>게시판 제목을 누르면 블로그 원문이 새 창으로 열립니다</li>
-          <li>글쓰기 화면에서 ‘발행하기’를 눌러 보세요</li>
+          <li>시안 A와 B는 주소가 달라 글쓰기 로그인을 각각 하셔야 합니다(실제 사이트는 한 번이면 됩니다)</li>
           <li>상담 신청서는 시안이라 전송되지 않습니다</li>
         </ul>
       </div>

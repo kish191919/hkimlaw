@@ -47,6 +47,13 @@
   function searchText(p) {
     return esc([p.title, sum1(p), TYPE[p.type]].concat(p.tags || [], (p.hubs || []).map(function (h) { return HUB[h] ? HUB[h].name : ''; })).join(' ').toLowerCase());
   }
+  /* 표지 사진: 글쓰기 화면에서 올린 사진(cover_url)이 먼저, 없으면 기존 글의 기본 표지(assets/covers.js) */
+  function coverOf(p) {
+    if (p.cover_url) return p.cover_url;
+    var m = window.VK_COVERS || {};
+    var f = (p.external_url && m[p.external_url]) || m[p.title];
+    return f ? ASSET + f : '';
+  }
   function dataAttrs(p) { return ' data-item data-cat="' + p.type + '" data-area="' + (p.hubs || []).join(' ') + '" data-text="' + searchText(p) + '"'; }
   function isNew(p) { return Date.now() - new Date(p.published_at).getTime() < 3 * 864e5 && p.source === 'site'; }
   function newBadge(p) { return isNew(p) ? '<span class="chip chip--new">NEW</span>' : ''; }
@@ -62,9 +69,9 @@
   }
   function colCard(p, opt) {
     opt = opt || {};
-    var a = ART[p.type] || ART.guide, l = link(p);
-    var art = p.cover_url
-      ? '<div class="col-card__art ' + a[0] + ' has-cover"><img src="' + esc(p.cover_url) + '" alt="" loading="lazy"><span class="col-card__kicker">' + a[2] + '</span></div>'
+    var a = ART[p.type] || ART.guide, l = link(p), cover = coverOf(p);
+    var art = cover
+      ? '<div class="col-card__art ' + a[0] + ' has-cover"><img src="' + esc(cover) + '" alt="" loading="lazy"><span class="col-card__kicker">' + a[2] + '</span></div>'
       : (theme === 'a'
         ? '<div class="col-card__art ' + a[0] + '">' + ic(a[1]) + '<span class="col-card__kicker">' + a[2] + '</span></div>'
         : '<div class="col-card__art ' + a[0] + '"><span class="col-card__kicker">' + a[2] + '</span>' + ic(a[1]) + '</div>');
@@ -89,7 +96,7 @@
     var l = link(p), d = dot(p.published_at);
     if (theme === 'a') {
       return '<li class="alert"><a href="' + l.href + '"' + l.attrs + '><time datetime="' + ymd(p.published_at) + '">' + d + '</time>' +
-        '<div class="alert__body"><span class="chip">' + TYPE[p.type] + '</span><h3>' + esc(p.title) + nw(l) + '</h3><p>' + esc(sum1(p)) + '</p></div>' + ic('arrow-ur') + '</a></li>';
+        '<div class="alert__body"><span class="chip">' + TYPE[p.type] + '</span><h3>' + esc(p.title) + nw(l) + '</h3></div>' + ic('arrow-ur') + '</a></li>';
     }
     return '<li class="news-item"><a href="' + l.href + '"' + l.attrs + '><span class="date-badge"><strong>' + d.slice(8) + '</strong><span>' + d.slice(0, 7) + '</span></span>' +
       '<div><span class="chip">' + TYPE[p.type] + '</span><h3>' + esc(p.title) + nw(l) + '</h3><p>' + esc(sum1(p)) + '</p></div>' + ic('arrow') + '</a></li>';
@@ -184,12 +191,12 @@
         var feat = items.filter(internal)[0];
         var fe = $('[data-live-feature]', board);
         if (fe && feat) {
-          var a = ART[feat.type] || ART.guide, href = 'post.html?id=' + feat.id;
+          var a = ART[feat.type] || ART.guide, href = 'post.html?id=' + feat.id, fc = coverOf(feat);
           var art = $('.col-feature__art', fe);
           if (art) {
-            art.className = 'col-feature__art ' + a[0] + (feat.cover_url ? ' has-cover' : '');
+            art.className = 'col-feature__art ' + a[0] + (fc ? ' has-cover' : '');
             art.setAttribute('href', href);
-            art.innerHTML = feat.cover_url ? '<img src="' + esc(feat.cover_url) + '" alt=""><span class="col-card__kicker">' + a[2] + '</span>' : ic(a[1]) + '<span class="col-card__kicker">' + a[2] + '</span>';
+            art.innerHTML = fc ? '<img src="' + esc(fc) + '" alt=""><span class="col-card__kicker">' + a[2] + '</span>' : ic(a[1]) + '<span class="col-card__kicker">' + a[2] + '</span>';
           }
           var tags = $('.post-tags', fe);
           if (tags) tags.innerHTML = '<span class="chip">' + TYPE[feat.type] + '</span>' + (feat.hubs || []).slice(0, 1).map(function (h) { return '<span class="chip chip--line">' + HUB[h].name + '</span>'; }).join('');
@@ -209,16 +216,18 @@
     var news = all.filter(function (p) { return p.board === 'news'; });
     var cols = all.filter(function (p) { return p.board === 'column'; });
     var notCase = function (p) { return p.type !== 'case'; };
+    /* 홈에서 같은 글이 두 번 나오지 않게: 영주권 문호는 문호 카드에만, 승인 사례는 승인 사례 섹션에만 */
     $$('[data-live-home="news"]').forEach(function (el) {
-      el.innerHTML = el.getAttribute('data-variant') === 'tiles'
-        ? news.filter(function (p) { return p.type !== 'bulletin'; }).slice(0, 5).map(newsTile).join('')
-        : news.slice(0, 5).map(homeNews).join('');
+      var n = parseInt(el.getAttribute('data-limit') || '5', 10);
+      var list = news.filter(function (p) { return p.type !== 'bulletin'; }).slice(0, n);
+      el.innerHTML = list.map(el.getAttribute('data-variant') === 'tiles' ? newsTile : homeNews).join('');
     });
     $$('[data-live-home="columns"]').forEach(function (el) {
       var n = parseInt(el.getAttribute('data-limit') || '6', 10);
+      var list = cols.filter(notCase).slice(0, n);
       el.innerHTML = el.getAttribute('data-variant') === 'rows'
-        ? cols.filter(notCase).slice(0, n).map(colRow).join('')
-        : cols.slice(0, n).map(function (p) { return colCard(p); }).join('');
+        ? list.map(colRow).join('')
+        : list.map(function (p) { return colCard(p); }).join('');
     });
     $$('[data-live-home="cases"]').forEach(function (el) {
       var cases = cols.filter(function (p) { return p.type === 'case'; });

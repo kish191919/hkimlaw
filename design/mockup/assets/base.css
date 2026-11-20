@@ -132,6 +132,12 @@ input, select, textarea { font: inherit; color: inherit; }
 .logo__text { display: grid; line-height: 1.25; }
 .logo__ko { font-weight: 700; font-size: 17px; letter-spacing: -.02em; }
 .logo__en { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; opacity: .72; }
+/* 영문 페이지: 로고 아랫줄(IMMIGRATION ATTORNEY · LOS ANGELES)이 길어 휴대폰에서 메뉴 버튼을 밀어내지 않게 */
+@media (max-width: 480px) {
+  html[lang="en"] .site-header .logo { flex: 0 1 auto; min-width: 0; }
+  html[lang="en"] .site-header .logo__text { min-width: 0; }
+  html[lang="en"] .site-header .logo__en { letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
 .gnav { margin-left: auto; }
 .gnav ul { display: flex; gap: 2px; list-style: none; margin: 0; padding: 0; }
 .gnav a {
@@ -208,6 +214,28 @@ body.nav-open .mnav { opacity: 1; visibility: visible; transform: none; }
   .mbar { display: grid; }
   body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 }
+
+/* ---------- 변호사님 글쓰기 바로가기 (로그인한 브라우저에서만 보임, assets/editbar.js) ---------- */
+.editbar {
+  position: fixed; left: 16px; bottom: 16px; z-index: 66;
+  display: flex; align-items: center; gap: 4px; padding: 5px;
+  border-radius: 999px; background: rgba(17,17,17,.9); color: #fff;
+  font-size: 14px; font-weight: 700; letter-spacing: -.01em;
+  backdrop-filter: blur(6px); box-shadow: 0 10px 30px -10px rgba(0,0,0,.55);
+}
+.editbar__who { padding: 0 8px 0 12px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.7); white-space: nowrap; }
+.editbar__btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; border-radius: 999px; color: #fff; white-space: nowrap; transition: background-color .2s; }
+.editbar__btn:hover { background: rgba(255,255,255,.14); }
+.editbar__btn--main, .editbar__btn--main:hover { background: var(--accent); color: var(--accent-ink); }
+.editbar__btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.editbar .ic { width: 16px; height: 16px; }
+@media (max-width: 860px) {
+  .editbar { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .editbar__who { display: none; }
+  .has-editbar .toast { bottom: 152px; }
+}
+@media print { .editbar { display: none; } }
+.footer-admin { margin-left: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 
 /* ---------- 시안 표시 ---------- */
 .mock-tag {
@@ -447,22 +475,27 @@ body.motion-paused *, body.motion-paused *::before, body.motion-paused *::after 
 @media (max-width: 560px) { .prevnext { grid-template-columns: 1fr; } .prevnext a:last-child { text-align: left; } }
 
 /* ---------- 푸터(공통 골격) ---------- */
-.site-footer { padding-block: 76px 40px; font-size: 15px; }
-.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.25fr; gap: 40px; }
-@media (max-width: 980px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+.site-footer { padding-block: 64px 36px; font-size: 15px; }
+.footer-grid { display: grid; grid-template-columns: 1.6fr 1.15fr 1fr; gap: 40px; }
+@media (max-width: 980px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-grid > .footer-brand { grid-column: 1 / -1; } }
 @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; gap: 32px; } }
 .footer-title { font-size: 12.5px; letter-spacing: .16em; font-weight: 800; opacity: .62; margin-bottom: 14px; }
 .footer-links { display: grid; gap: 9px; }
 .footer-links a { opacity: .88; }
 .footer-links a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
-.footer-contact { display: grid; gap: 10px; margin-top: 20px; }
+.footer-contact { display: grid; gap: 10px; }
 .footer-contact li { display: flex; gap: 10px; align-items: flex-start; }
 .footer-contact .ic { margin-top: 4px; opacity: .8; }
 .socials { display: flex; gap: 10px; margin-top: 22px; }
 .socials a { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--footer-line); transition: transform .2s; }
 .socials a:hover { transform: translateY(-2px); }
 .socials .ic { width: 19px; height: 19px; }
-.footer-legal { margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--footer-line); display: grid; gap: 10px; font-size: 13.5px; line-height: 1.7; opacity: .82; }
-.footer-legal nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-weight: 600; }
+.footer-legal { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--footer-line); display: grid; gap: 8px; font-size: 13.5px; line-height: 1.7; opacity: .82; }
+/* 맨 아래 한 줄: 왼쪽 저작권·책임 변호사, 오른쪽 정책 링크와 변호사 로그인 */
+.footer-legal__row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 24px; }
+.footer-legal nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-weight: 600; }
+.footer-legal nav .footer-admin { margin-left: 0; padding-left: 18px; border-left: 1px solid var(--footer-line); }
+.footer-legal__row > p span { white-space: nowrap; }
+.footer-legal__disc { font-size: 13px; opacity: .8; }
 .footer-legal nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .mock-note { margin-top: 14px; display: inline-flex; gap: 8px; align-items: center; padding: 8px 14px; border-radius: 10px; font-size: 13px; border: 1px dashed var(--footer-line); }

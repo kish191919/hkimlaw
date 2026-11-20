@@ -37,6 +37,46 @@
     toast(t.getAttribute('data-toast'));
   });
 
+  /* ---------- 업무분야 링크를 누르면 간단 문의 폼의 상담 분야를 골라 둔다 (B 영문 홈: href="#reach" data-pick-area="green") ---------- */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-pick-area]');
+    if (!a) return;
+    var box = document.getElementById((a.getAttribute('href') || '').slice(1));
+    var sel = box && box.querySelector('select[name="area"]');
+    if (sel) sel.value = a.getAttribute('data-pick-area');
+  });
+
+  /* ---------- 방송 영상: 포스터를 누르면 그 자리에서 유튜브 재생 (data-yt="영상 ID", data-start·data-end 초) ----------
+     youtube-nocookie 주소를 쓰고, 누르기 전에는 유튜브를 전혀 불러오지 않는다.
+     유튜브는 주소창이 file:// 이면 재생을 막으므로(오류 153) 로컬에서는 웹 서버로 열어야 한다. */
+  var YT_ID = /^[A-Za-z0-9_-]{11}$/;
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-yt]');
+    if (!b) return;
+    var id = b.getAttribute('data-yt');
+    if (!YT_ID.test(id)) return;
+    e.preventDefault();
+    var q = ['autoplay=1', 'rel=0', 'playsinline=1'];
+    var s = parseInt(b.getAttribute('data-start') || '', 10), en = parseInt(b.getAttribute('data-end') || '', 10);
+    if (location.protocol === 'file:') {  /* 파일로 연 시안: 유튜브 새 창으로 */
+      window.open('https://www.youtube.com/watch?v=' + id + (s > 0 ? '&t=' + s + 's' : ''), '_blank', 'noopener');
+      return;
+    }
+    if (s > 0) q.push('start=' + s);
+    if (en > 0) q.push('end=' + en);
+    var box = document.createElement('div');
+    box.className = 'video-card__player';
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?' + q.join('&');
+    f.title = b.getAttribute('data-yt-title') || 'YouTube 영상';
+    f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    f.setAttribute('allowfullscreen', '');
+    f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    box.appendChild(f);
+    b.replaceWith(box);
+    f.focus();
+  });
+
   /* ---------- 포커스 가두기 (모바일 메뉴 · 비자 진단 창) ---------- */
   var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
   function focusables(box) {

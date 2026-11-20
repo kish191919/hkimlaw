@@ -11,6 +11,11 @@
   var LIVE = !!(cfg.supabaseUrl && cfg.supabaseKey && window.supabase);
   var sb = LIVE ? window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey) : null;
   var LOGIN_DOMAIN = cfg.loginDomain || 'example.com';
+  /* 이 글쓰기 화면이 시안 사이트(A·B) 주소 안에 있으면 그 사이트를 '홈'으로 쓴다 (사이트 푸터의 '변호사 로그인'으로 들어온 경우) */
+  var ON_SITE = ['a', 'b'].filter(function (k) {
+    try { return SITES[k] && new URL(SITES[k]).origin === location.origin; } catch (e) { return false; }
+  })[0] || '';
+  var HOME = ON_SITE || 'a';
 
   var TYPES = {
     news: [['bulletin', '영주권 문호'], ['policy', '정책·규정'], ['court', '법원 판결'], ['notice', '이민국 공지']],
@@ -511,7 +516,7 @@
   function buildKit(id) {
     var b = board(), t = title.value.trim(), s = sums.map(function (x) { return x.value.trim(); });
     var areas = $$('input[name="area"]:checked').map(function (c) { return c.value; });
-    var base = id ? site('a', 'post.html') + '?id=' + id : 'https://vincentkimlaw.com/' + b + '/1236?';
+    var base = id ? site(HOME, 'post.html') + '?id=' + id : 'https://vincentkimlaw.com/' + b + '/1236?';
     var url = function (src) { return base + (id ? '&' : '') + 'utm_source=' + src + '&utm_medium=social&utm_campaign=' + b; };
     kitData = {
       kakao: '[' + BOARD_LABEL[b] + '] ' + t + '\n\n• ' + s[0] + '\n• ' + s[1] + '\n• ' + s[2] + '\n\n👉 ' + url('kakao'),
@@ -526,7 +531,7 @@
     var va = $('[data-kit-view="a"]'), vb = $('[data-kit-view="b"]'), vboard = $('[data-kit-board]');
     if (id) {
       va.href = site('a', 'post.html') + '?id=' + id; vb.href = site('b', 'post.html') + '?id=' + id;
-      vboard.href = site('a', b === 'news' ? 'news.html' : 'column.html');
+      vboard.href = site(HOME, b === 'news' ? 'news.html' : 'column.html');
     }
     va.hidden = vb.hidden = vboard.hidden = !id;
   }
@@ -690,7 +695,7 @@
         var badge = p.status === 'draft' ? '<span class="st st--draft">임시</span>' : (future ? '<span class="st st--later">예약</span>' : '<span class="st st--live">발행</span>');
         return '<li><div class="adm-mine__t">' + badge + '<span>' + esc(p.title) + '</span></div>' +
           '<div class="adm-mine__m"><span>' + BOARD_LABEL[p.board] + ' · ' + dayFmt.format(new Date(p.published_at)) + '</span>' +
-          (p.status === 'published' && !future ? '<a href="' + site('a', 'post.html') + '?id=' + p.id + '" target="_blank" rel="noopener">보기</a>' : '') +
+          (p.status === 'published' && !future ? '<a href="' + site(HOME, 'post.html') + '?id=' + p.id + '" target="_blank" rel="noopener">보기</a>' : '') +
           '<button type="button" data-edit="' + p.id + '">고치기</button><button type="button" data-del="' + p.id + '" data-title="' + esc(p.title) + '">지우기</button></div></li>';
       }).join('');
     }, function (err) { fail('글 목록을 불러오지 못했습니다.', err); });
@@ -771,7 +776,11 @@
 
   /* ---------- 시작 ---------- */
   $$('[data-site-link]').forEach(function (a) { var k = a.getAttribute('data-site-link'); if (SITES[k]) a.href = SITES[k]; });
+  var back = $('[data-back-link]');
+  if (back && ON_SITE) { back.href = SITES[ON_SITE].replace(/\/$/, '') + '/'; back.textContent = '홈페이지로 돌아가기'; }
   renderTypes('');
+  var startBoard = new URLSearchParams(location.search).get('board');
+  if (BOARD_LABEL[startBoard]) setBoard(startBoard);
   body.innerHTML = PLACEHOLDER;
   update();
   if (LIVE) {
