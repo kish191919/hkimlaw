@@ -952,16 +952,16 @@ ChatGPT, Gemini, Perplexity, 구글 AI 개요가 답변의 출처로 인용하�
 
 ### 13.2 시안 두 가지
 
-| | A안 "Wilshire Editorial" | B안 "Warm Boutique" |
+| | A안 "Wilshire Editorial" | B안 "Personal Counsel" (2026-11-20 개편, 이전 이름 Warm Boutique) |
 |---|---|---|
-| 콘셉트 | 격식과 신뢰. 기존 카페 배너(네이비·골드)와 이어지면서, 큰 세리프 헤드라인으로 현대적으로 | 따뜻하고 친근한 부티크. 경쟁사의 네이비·골드·블랙과 확실히 구분된다 |
-| 주 참고 | Boundless(타이포·여백), WR Immigration(시네마틱 사진), Fragomen(소식 모듈) | Elyon Legal(색·둥근 사진·수치 카드), Herman(창업자 카드), SimVisa(전환 장치) |
+| 콘셉트 | 격식과 신뢰. 기존 카페 배너(네이비·골드)와 이어지면서, 큰 세리프 헤드라인으로 현대적으로. 정보 중심 구성 | 변호사 1인 브랜드. 변호사의 얼굴·글·영상으로 신뢰를 쌓는다. 경쟁사의 네이비·골드·블랙과 색으로도 구분된다 |
+| 주 참고 | Boundless(타이포·여백), WR Immigration(시네마틱 사진), Fragomen(소식 모듈) | 의뢰인이 준 jkparklaw.com(구조), kfreemanlawoffice.com(표현 기법), Elyon Legal(색). 상세는 [benchmark-jkpark-kfreeman.md](benchmark-jkpark-kfreeman.md) |
 | 색상 | 네이비 `#13294B` / 골드 `#B08D57` / 아이보리 `#F7F4EE` / 잉크 `#1F2328` | 딥그린 `#1F3D36` / 테라코타 `#C8643B`(상담 버튼) / 크림 `#F5EFE6` / 차콜 `#222222` |
 | 서체 | 제목 Noto Serif KR(크고 가볍게), 본문 Pretendard | 제목 Noto Serif KR, 본문 Pretendard |
-| 히어로 | 전면 무음 영상과 큰 세리프 헤드라인 | 둥근 프레임의 변호사 사진과 수치 카드 |
-| 분위기 | 에디토리얼 로펌 | 믿음직한 동네 부티크 |
+| 히어로 | 전면 무음 영상과 큰 세리프 헤드라인 | 화면 전체 변호사 사진과 큰 전화번호 |
+| 분위기 | 에디토리얼 로펌 | 내 사건을 직접 맡는 변호사 |
 
-두 안 모두 모바일 하단 고정 상담 바(대륜), 곡선 경로 절차 타임라인(Alma), 영상·미디어 블록(Hacking, Lincoln-Goldfinch)을 공통으로 넣는다. 상세는 [benchmark-sites.md §6](benchmark-sites.md).
+두 안 모두 모바일 하단 고정 상담 바(대륜), 곡선 경로 절차 타임라인(Alma, B는 상담 안내 페이지에만), 영상·미디어 블록(Hacking, Lincoln-Goldfinch)을 공통으로 넣는다. 처음에는 두 안의 섹션 구성이 거의 같았으나, 2026-11-20에 B의 구성을 따로 짰다. 상세는 [benchmark-sites.md §6](benchmark-sites.md).
 
 ### 13.3 사진 촬영 가이드 (전문 촬영 권장, 반나절)
 

@@ -6,3 +6,6 @@ design/mockup/dist/
 
 # Vercel 프로젝트 연결 정보
 .vercel
+
+# Supabase CLI 캐시 (프로젝트 연결 정보)
+supabase/.temp/

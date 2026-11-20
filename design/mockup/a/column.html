@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -66,14 +66,14 @@
   </div>
 </section>
 <section class="section board-sec" aria-label="전문가 칼럼 목록">
-  <div class="container" data-board data-per="9">
-    <article class="col-feature">
+  <div class="container" data-board data-per="9" data-live-board="column">
+    <article class="col-feature" data-live-feature>
       <a class="col-feature__art art-guide" href="post.html" tabindex="-1" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></a>
       <div>
         <p class="eyebrow">추천 칼럼</p>
         <div class="post-tags"><span class="chip">실무 가이드</span><span class="chip chip--line">이민비자·영주권</span></div>
         <h2><a href="post.html">영주권 카드를 분실했다면: 재발급(I-90)과 임시 증명(ADIT)</a></h2>
-        <p>임시 영주권 증명(ADIT)은 이제 이민국 방문 없이 우편으로도 받을 수 있습니다. 재발급 절차와 함께 정리했습니다.</p>
+        <p data-live-feature-sum>임시 영주권 증명(ADIT)은 이제 이민국 방문 없이 우편으로도 받을 수 있습니다. 재발급 절차와 함께 정리했습니다.</p>
         <p class="col-feature__meta"><img src="../assets/attorney-face.jpg" alt="" width="36" height="36" loading="lazy"><span>김형걸 변호사 · 2026.11.10 · 읽는 시간 4분</span></p>
         <a class="btn btn--dark" href="post.html">글 읽기 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
@@ -183,5 +183,9 @@
 </div>
 <a class="mock-tag" href="../index.html"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg>시안 A · Wilshire Editorial · 전문가 칼럼</a>
 <script src="../assets/mockup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="../assets/config.js"></script>
+<script src="../assets/live.js"></script>
 </body>
 </html>

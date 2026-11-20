@@ -236,7 +236,7 @@
   });
 
   /* ---------- 게시판: 분류 · 업무분야 · 검색 · 페이지 ---------- */
-  $$('[data-board]').forEach(function (board) {
+  function initBoard(board) {
     var items = $$('[data-item]', board);
     var filters = $$('[data-filter]', board);
     var area = $('[data-filter-area]', board);
@@ -246,7 +246,8 @@
     var pager = $('[data-pager]', board);
     var per = parseInt(board.getAttribute('data-per') || '10', 10);
     var listTop = $('.board-tools', board) || board;
-    var state = { cat: params.get('cat') || 'all', area: params.get('area') || 'all', q: '', page: 1 };
+    var state = { cat: params.get('cat') || 'all', area: params.get('area') || 'all', q: (params.get('q') || '').trim().toLowerCase(), page: 1 };
+    if (q && state.q) q.value = params.get('q').trim();
     if (!filters.some(function (b) { return b.getAttribute('data-filter') === state.cat; })) state.cat = 'all';
     if (area) {
       area.value = state.area;
@@ -295,8 +296,20 @@
     });
     if (area) area.addEventListener('change', function () { state.area = area.value; state.page = 1; render(); });
     if (q) q.addEventListener('input', function () { state.q = q.value.trim().toLowerCase(); state.page = 1; render(); });
+    /* 시연판(live.js)이 글을 새로 채운 뒤 다시 계산한다 */
+    board._vkRefresh = function () {
+      items = $$('[data-item]', board);
+      filters.forEach(function (b) {
+        var c = b.getAttribute('data-filter');
+        var n = c === 'all' ? items.length : items.filter(function (el) { return el.getAttribute('data-cat') === c; }).length;
+        var small = $('small', b);
+        if (small) small.textContent = n;
+      });
+      render(false);
+    };
     render(false);
-  });
+  }
+  $$('[data-board]').forEach(initBoard);
 
   /* ---------- 페이지 안 메뉴(서브 내비) 현재 위치 ---------- */
   var subnav = $('[data-subnav]');
@@ -395,12 +408,17 @@
     var total = r.height - window.innerHeight * 0.6;
     progressEl.style.transform = 'scaleX(' + clamp(-r.top / Math.max(total, 1), 0, 1) + ')';
   }
-  var toc = $('[data-toc]');
-  if (toc && hasIO) {
-    var links = $$('a[href^="#"]', toc).filter(function (a) { return a.parentNode === toc && a.getAttribute('href').length > 1; });
+  var tocIO = null;
+  function initToc() {
+    var toc = $('[data-toc]');
+    if (!toc || !hasIO) return;
+    if (tocIO) tocIO.disconnect();
+    var links = $$('a[href^="#"]', toc).filter(function (a) {
+      return (a.parentNode === toc || a.parentNode.hasAttribute('data-post-toc-links')) && a.getAttribute('href').length > 1;
+    });
     var map = {};
     links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
-    var tocIO = new IntersectionObserver(function (entries) {
+    tocIO = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
         links.forEach(function (l) { l.classList.remove('is-active'); });
@@ -409,6 +427,7 @@
     }, { rootMargin: '-25% 0px -65% 0px' });
     Object.keys(map).forEach(function (id) { var h = document.getElementById(id); if (h) tocIO.observe(h); });
   }
+  initToc();
 
   /* ---------- LA 스카이라인 (A안 히어로) ---------- */
   $$('[data-skyline]').forEach(function (svg) {
@@ -571,6 +590,14 @@
     if (quizOpen()) trap($('.modal__panel', quiz), e);
     else if (navOpen() && mnav) trap(mnav, e);
   });
+
+  /* ---------- 시연판(live.js)에 넘기는 기능 ---------- */
+  window.VKMockup = {
+    toast: toast,
+    initToc: initToc,
+    refreshBoard: function (board) { if (board && board._vkRefresh) board._vkRefresh(); },
+    layout: layoutAll
+  };
 
   /* ---------- 연도 ---------- */
   $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });

@@ -202,3 +202,54 @@ img { display: block; max-width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; } }
 .og + .chk__hint { margin-top: 10px; }
+
+/* ---------- 시연판: 로그인 · 내 글 · 상태 ---------- */
+body.is-locked { overflow: hidden; }
+.login { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 18px; background: linear-gradient(160deg, #1D2327, #2C3338); overflow: auto; }
+.login__card { width: min(420px, 100%); padding: 34px 30px 28px; border-radius: 20px; background: #fff; box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .6); display: grid; gap: 14px; }
+.adm-mark--lg { width: 48px; height: 48px; border-radius: 14px; font-size: 16px; background: #1D2327; color: #fff; }
+.login__card h1 { font-size: 24px; letter-spacing: -.02em; margin-top: 4px; }
+.login__sub { color: var(--a-muted); font-size: 14.5px; margin-top: -8px; }
+.login__field { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
+.login__field input { padding: 13px 14px; border-radius: 12px; border: 1.5px solid #D0D5DC; font-size: 16px; font-weight: 500; }
+.login__field input:focus { outline: none; border-color: var(--a-blue); box-shadow: 0 0 0 3px var(--a-blue-soft); }
+.login__err { min-height: 1.4em; color: #B42318; font-size: 14px; font-weight: 600; }
+.login__note { font-size: 13px; line-height: 1.6; color: var(--a-muted); padding-top: 4px; border-top: 1px solid var(--a-line); }
+.login__links { font-size: 13.5px; }
+.adm-btn--block { width: 100%; }
+.adm-btn--danger { margin-top: 10px; min-height: 44px; border-color: #F1B5B5; color: #B42318; background: #fff; font-size: 14.5px; }
+.adm-btn--danger:hover { border-color: #B42318; }
+.adm-btn:disabled { opacity: .55; cursor: wait; }
+.adm-logout { padding: 6px 12px; border-radius: 8px; border: 1px solid #50575E; color: #F0F0F1; font-size: 13px; }
+.adm-logout:hover { background: #2C3338; }
+.adm-link { color: var(--a-blue); font-weight: 700; font-size: 13.5px; }
+.adm-mine { margin-top: 12px; padding: 14px 14px 8px; border-radius: 12px; background: var(--a-card); border: 1px solid var(--a-line); }
+.adm-mine__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.adm-mine__head h2 { font-size: 14px; }
+.adm-mine__list { list-style: none; margin: 0; padding: 0; max-height: 420px; overflow: auto; }
+.adm-mine__list li { padding: 10px 0; border-top: 1px solid var(--a-line); font-size: 13.5px; }
+.adm-mine__t { display: flex; gap: 6px; align-items: flex-start; font-weight: 700; line-height: 1.45; }
+.adm-mine__m { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; margin-top: 4px; color: var(--a-muted); font-size: 12.5px; }
+.adm-mine__m a, .adm-mine__m button { color: var(--a-blue); font-weight: 700; font-size: 12.5px; text-decoration: underline; text-underline-offset: 2px; }
+.adm-mine__m button[data-del] { color: #B42318; }
+.adm-mine__empty { color: var(--a-muted); }
+.st { flex: none; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+.st--live { background: var(--a-ok-soft); color: var(--a-ok); }
+.st--draft { background: #EEF0F3; color: #50575E; }
+.st--later { background: var(--a-blue-soft); color: #1747A0; }
+@media (max-width: 1280px) { .adm-mine { grid-column: 1 / -1; margin-top: 0; } }
+
+/* ---------- 본문 안 사진·영상 ---------- */
+.adm-editor figure { margin: 1.1em 0; }
+.adm-editor figure img { display: block; max-width: 100%; }
+.adm-editor figcaption { outline: none; }
+.adm-editor figcaption.cap-ph { color: #A7AEB8; font-style: italic; }
+.adm-media { position: relative; padding: 10px; border-radius: 12px; background: #F6F7F8; border: 1px dashed #C3C8D0; user-select: none; }
+.adm-media__frame { position: relative; display: block; overflow: hidden; border-radius: 8px; background: #111; }
+.adm-media__frame img { width: 100%; max-height: 320px; object-fit: cover; opacity: .85; }
+.adm-media__frame video { display: block; width: 100%; max-height: 360px; background: #000; }
+.adm-media--short .adm-media__frame { width: min(240px, 100%); aspect-ratio: 9 / 16; margin-inline: auto; }
+.adm-media--short .adm-media__frame img { height: 100%; max-height: none; }
+.adm-media__badge { position: absolute; left: 10px; top: 10px; padding: 4px 10px; border-radius: 999px; background: #FF0033; color: #fff; font-size: 12.5px; font-weight: 800; }
+.adm-media figcaption { margin-top: 8px; user-select: text; }
+.adm-thumbs video { width: 108px; height: 76px; object-fit: cover; border-radius: 8px; background: #000; }

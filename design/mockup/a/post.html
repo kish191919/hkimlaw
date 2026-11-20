@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -19,6 +19,7 @@
 <body>
 <script src="../assets/icons.js"></script>
 <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<script>if (/[?&]id=\d/.test(location.search)) document.documentElement.classList.add('post-loading');</script>
 <div class="progress" data-progress aria-hidden="true"></div>
 <div class="ticker" data-ticker>
   <div class="container">
@@ -54,22 +55,22 @@
 </div>
 
 <main id="main">
-  <article data-article>
+  <article data-article data-live-post>
     <header class="post-hero">
       <div class="container">
-        <nav class="crumbs" aria-label="현재 위치">
+        <nav class="crumbs" aria-label="현재 위치" data-post-crumbs>
           <a href="index.html">홈</a><span class="sep" aria-hidden="true">›</span>
           <a href="column.html">전문가 칼럼</a><span class="sep" aria-hidden="true">›</span>
           <a href="column.html?cat=guide">실무 가이드</a>
         </nav>
-        <div class="post-tags">
+        <div class="post-tags" data-post-tags>
           <span class="chip">실무 가이드</span>
           <a class="chip chip--line" href="practice-green-card.html">이민비자·영주권</a>
           <span class="chip chip--line">I-90</span>
           <span class="chip chip--line">ADIT</span>
         </div>
         <h1 class="post-title">영주권 카드를 분실했다면: 재발급(I-90)과 임시 증명(ADIT)</h1>
-        <div class="post-meta">
+        <div class="post-meta" data-post-meta>
           <span class="author"><img src="../assets/attorney-face.jpg" alt="" width="38" height="38">김형걸 변호사</span>
           <span>작성 2026.11.10</span><span class="dot" aria-hidden="true"></span>
           <span>최종 업데이트 2026.11.10</span><span class="dot" aria-hidden="true"></span>
@@ -81,7 +82,8 @@
     <div class="container post-main">
       <div class="post-layout">
         <div class="prose">
-          <section class="summary" aria-labelledby="sum-title">
+          <p class="post-stale" data-post-stale hidden><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg><span></span></p>
+          <section class="summary" aria-labelledby="sum-title" data-post-summary>
             <p class="summary__title" id="sum-title">3줄 요약</p>
             <ol>
               <li>미국 안에서 영주권 카드를 잃어버렸다면 Form I-90으로 재발급을 신청합니다.</li>
@@ -90,6 +92,7 @@
             </ol>
           </section>
 
+          <div class="post-body" data-post-body>
           <p>영주권 카드를 잃어버리면 당황스럽지만, 순서대로 처리하면 어렵지 않습니다. 다만 <strong>어디에서 잃어버렸는지</strong>, <strong>가까운 시일 안에 해외여행 계획이 있는지</strong>에 따라 필요한 절차가 달라집니다.</p>
 
           <h2 id="s1">1. 미국 안에서 분실했을 때</h2>
@@ -129,7 +132,9 @@
               <li><a href="https://egov.uscis.gov/processing-times/" target="_blank" rel="noopener">USCIS 처리 기간 <svg class="ic" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a></li>
             </ul>
           </aside>
+          </div>
 
+          <p class="disclaim" data-post-case-disclaimer hidden><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>개별 사건의 결과는 사실관계와 법적 상황에 따라 다르며, 과거의 결과가 향후 유사한 사건의 결과를 보장하지 않습니다. 사례는 의뢰인 동의를 받아 식별 정보를 지운 뒤 싣습니다.</p>
           <p class="disclaimer">이 글은 일반적인 정보이며 법률 자문이 아닙니다. 개별 사안은 사실관계에 따라 달라질 수 있으니 상담으로 확인하세요. 작성일 기준 정보이며 이후 규정이 바뀌었을 수 있습니다.</p>
 
           <div class="share" aria-label="공유하기">
@@ -146,7 +151,7 @@
               <p>분실 장소, 여행 계획, 체류 기간에 따라 준비할 서류가 달라집니다.</p>
             </div>
             <div class="btns">
-              <a class="btn btn--primary" href="contact.html?area=green#form">상담 신청 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <a class="btn btn--primary" href="contact.html?area=green#form" data-post-area-link>상담 신청 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
               <a class="btn btn--kakao" href="#" data-toast="카카오톡 ID: hkimlaw16 (실제 사이트에서는 카카오톡 채팅이 열립니다)"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>카톡 상담</a>
             </div>
           </section>
@@ -159,7 +164,7 @@
             </div>
           </div>
 
-          <nav class="prevnext" aria-label="이전 글, 다음 글">
+          <nav class="prevnext" aria-label="이전 글, 다음 글" data-post-prevnext>
             <a href="https://blog.naver.com/hkimlaw/224448694402" target="_blank" rel="noopener"><span>이전 글</span><strong>이민비자·영주권 인터뷰, 공적부조 관련 준비사항</strong></a>
             <a href="https://blog.naver.com/hkimlaw/224472372757" target="_blank" rel="noopener"><span>다음 글</span><strong>601 waiver 승인 케이스 공유</strong></a>
           </nav>
@@ -168,14 +173,16 @@
         <aside class="post-aside">
           <nav class="toc" data-toc aria-label="목차">
             <p class="toc__title">목차</p>
+            <div data-post-toc-links>
             <a href="#s1">1. 미국 안에서 분실했을 때</a>
             <a href="#s2">2. 새 카드를 기다리는 동안</a>
             <a href="#s3">3. 해외에서 분실했을 때</a>
             <a href="#s4">4. 상황별로 한눈에 보기</a>
+            </div>
             <div class="aside-card">
               <h3>바로 상담하기</h3>
-              <p>여행 일정이 가깝다면 빨리 확인하는 것이 좋습니다.</p>
-              <a class="btn btn--dark btn--sm" href="contact.html?area=green#form">상담 신청</a>
+              <p>궁금한 점이 있다면 빨리 확인하는 것이 좋습니다.</p>
+              <a class="btn btn--dark btn--sm" href="contact.html?area=green#form" data-post-area-link>상담 신청</a>
               <a class="btn btn--kakao btn--sm" href="#" data-toast="카카오톡 ID: hkimlaw16 (실제 사이트에서는 카카오톡 채팅이 열립니다)">카톡 상담</a>
             </div>
             <div class="aside-card aside-card--memo" style="border-style:dashed">
@@ -195,9 +202,9 @@
           <p class="eyebrow">Related</p>
           <h2 class="sec-head__title" id="rel-title">함께 읽으면 좋은 글</h2>
         </div>
-        <a class="link-arrow" href="column.html">전문가 칼럼 전체 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="link-arrow" href="column.html" data-post-board-link>전문가 칼럼 전체 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
-      <div class="related"><a class="col-card" href="https://blog.naver.com/hkimlaw/224448694402" target="_blank" rel="noopener"><div class="col-card__art art-guide"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></div><div class="col-card__body"><span class="chip">실무 가이드</span><h3>이민비자·영주권 인터뷰, 공적부조 관련 준비사항<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">해외 대사관의 공적부조 질문지로 살펴보는 인터뷰 준비. I-864와 세금보고서만으로는 부족할 수 있습니다.</p><time datetime="2026-10-21">2026.10.21</time></div></a><a class="col-card" href="https://blog.naver.com/hkimlaw/224433687456" target="_blank" rel="noopener"><div class="col-card__art art-qna"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span class="col-card__kicker">Q&amp;A</span></div><div class="col-card__body"><span class="chip">Q&A 해설</span><h3>영구영주권(정식영주권) 승인 없이 시민권 신청?<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">결혼 2년이 되기 전에 받은 조건부 영주권. I-751 승인 전에 시민권을 신청할 수 있을까요?</p><time datetime="2026-10-07">2026.10.07</time></div></a><a class="col-card" href="https://blog.naver.com/hkimlaw/224303275416" target="_blank" rel="noopener"><div class="col-card__art art-guide"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></div><div class="col-card__body"><span class="chip">실무 가이드</span><h3>영주권 신체검사는 이민국 지정 병원에서<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">최근 I-485 케이스에서 I-693 신체검사 관련 RFE가 잇따랐습니다. 지정 의사에게 받아야 하는 이유를 설명합니다.</p><time datetime="2026-06-02">2026.06.02</time></div></a></div>
+      <div class="related" data-post-related><a class="col-card" href="https://blog.naver.com/hkimlaw/224448694402" target="_blank" rel="noopener"><div class="col-card__art art-guide"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></div><div class="col-card__body"><span class="chip">실무 가이드</span><h3>이민비자·영주권 인터뷰, 공적부조 관련 준비사항<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">해외 대사관의 공적부조 질문지로 살펴보는 인터뷰 준비. I-864와 세금보고서만으로는 부족할 수 있습니다.</p><time datetime="2026-10-21">2026.10.21</time></div></a><a class="col-card" href="https://blog.naver.com/hkimlaw/224433687456" target="_blank" rel="noopener"><div class="col-card__art art-qna"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span class="col-card__kicker">Q&amp;A</span></div><div class="col-card__body"><span class="chip">Q&A 해설</span><h3>영구영주권(정식영주권) 승인 없이 시민권 신청?<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">결혼 2년이 되기 전에 받은 조건부 영주권. I-751 승인 전에 시민권을 신청할 수 있을까요?</p><time datetime="2026-10-07">2026.10.07</time></div></a><a class="col-card" href="https://blog.naver.com/hkimlaw/224303275416" target="_blank" rel="noopener"><div class="col-card__art art-guide"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></div><div class="col-card__body"><span class="chip">실무 가이드</span><h3>영주권 신체검사는 이민국 지정 병원에서<span class="sr-only"> (새 창)</span></h3><p class="col-card__sum">최근 I-485 케이스에서 I-693 신체검사 관련 RFE가 잇따랐습니다. 지정 의사에게 받아야 하는 이유를 설명합니다.</p><time datetime="2026-06-02">2026.06.02</time></div></a></div>
     </div>
   </section>
 </main>
@@ -273,5 +280,9 @@
 </div>
 <a class="mock-tag" href="../index.html"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg>시안 A · Wilshire Editorial · 게시글 상세</a>
 <script src="../assets/mockup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="../assets/config.js"></script>
+<script src="../assets/live.js"></script>
 </body>
 </html>

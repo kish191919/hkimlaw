@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>이민법 소식 | 시안 B · Warm Boutique · 김형걸 이민법 변호사</title>
+<title>이민법 소식 | 시안 B · Personal Counsel · 김형걸 이민법 변호사</title>
 <meta name="description" content="영주권 문호, 정책·규정, 법원 판결, 이민국 공지. 김형걸 변호사가 직접 정리하는 이민법 소식. (디자인 시안)">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#F5EFE6">
@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="../assets/base.css">
 <link rel="stylesheet" href="../assets/pages.css">
 <link rel="stylesheet" href="style.css">
@@ -30,13 +30,13 @@
     <a class="ticker__more" href="news.html">이민법 소식 전체 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
   </div>
 </div>
-<header class="site-header" data-header>
+<header class="site-header site-header--b" data-header>
   <div class="container">
     <a class="logo" href="index.html" aria-label="김형걸 이민법 변호사 홈"><span class="logo__mark">VK</span><span class="logo__text"><span class="logo__ko">김형걸 이민법 변호사</span><span class="logo__en">Law Offices of Vincent Kim</span></span></a>
-    <nav class="gnav" aria-label="주 메뉴"><ul><li><a href="index.html">홈</a></li><li><a href="about.html">변호사 소개</a></li><li><a href="practice.html">업무분야</a></li><li><a href="news.html" aria-current="page">이민법소식</a></li><li><a href="column.html">전문가칼럼</a></li><li><a href="contact.html">상담안내</a></li></ul></nav>
+    <nav class="gnav" aria-label="주 메뉴"><ul><li><a href="index.html">홈</a></li><li><a href="about.html">변호사 소개</a></li><li class="has-drop has-drop--mega"><a href="practice.html">업무분야</a><div class="drop drop--mega"><div class="drop__groups"><div class="drop__group drop__group--grant"><p class="drop__label">TRACK 01 · 이민·비자</p><a href="practice-green-card.html"><b>이민비자·영주권</b><span>가족과 함께 사는 길을 처음부터 설계합니다</span></a><a href="practice-nonimmigrant-visa.html"><b>비이민비자</b><span>일하고, 공부하고, 사업하는 신분을 지킵니다</span></a><a href="practice-citizenship.html"><b>시민권</b><span>영주권 다음 단계까지 끝까지 챙깁니다</span></a></div><div class="drop__group drop__group--defend"><p class="drop__label">TRACK 02 · 추방·구제</p><a href="practice-removal-defense.html"><b>추방재판·이민구제</b><span>기한이 있는 일, 통지서를 받은 날 바로 대응합니다</span></a><a class="drop__call" href="tel:+12137036828"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><b>통지서를 받으셨다면 바로 전화</b>(213) 703-6828</span></a></div></div><a class="drop__all" href="practice.html">업무분야 한눈에 보기 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></li><li class="has-drop"><a href="news.html" aria-current="page">이민법소식</a><div class="drop"><a href="news.html?cat=bulletin">영주권 문호</a><a href="news.html?cat=policy">정책·규정</a><a href="news.html?cat=court">법원 판결</a><a href="news.html?cat=notice">이민국 공지</a></div></li><li class="has-drop"><a href="column.html">전문가칼럼</a><div class="drop"><a href="column.html?cat=guide">실무 가이드</a><a href="column.html?cat=qna">Q&A 해설</a><a href="column.html?cat=case">승인 사례</a><a href="column.html?cat=view">변호사의 시선</a></div></li><li><a href="contact.html">상담안내</a></li></ul></nav>
     <div class="h-actions">
       <div class="lang" role="group" aria-label="언어 선택"><a href="index.html" aria-current="true">KO</a><a href="en.html" lang="en" hreflang="en">EN</a></div>
-      <a class="btn btn--sm btn--ghost btn--call" href="tel:+12137036828"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>(213) 703-6828</a>
+      <a class="h-phone" href="tel:+12137036828"><small>전화 상담</small><strong>(213) 703-6828</strong></a>
       <a class="btn btn--sm btn--primary" href="contact.html#form">상담 예약</a>
       <button class="nav-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mnav" data-nav-toggle><svg class="ic" aria-hidden="true"><use href="#i-menu"/></svg></button>
     </div>
@@ -66,13 +66,13 @@
   </div>
 </section>
 <section class="section board-sec" aria-label="이민법 소식 목록">
-  <div class="container" data-board data-per="10">
-    <div class="board-pin">
+  <div class="container" data-board data-per="10" data-live-board="news">
+    <div class="board-pin" data-live-pin>
       <p class="board-pin__month">11<span>월</span></p>
       <div>
         <p class="eyebrow">고정 · 이달의 영주권 문호</p>
         <h2>2026년 11월 영주권 문호</h2>
-        <p>새 회계연도 첫 달인 10월에 대부분 동결됐던 가족이민 문호가 11월에는 어떻게 움직였는지 정리했습니다.</p>
+        <p data-live-vb-desc>새 회계연도 첫 달인 10월에 대부분 동결됐던 가족이민 문호가 11월에는 어떻게 움직였는지 정리했습니다.</p>
       </div>
       <div class="btns">
         <a class="btn btn--primary" href="https://blog.naver.com/hkimlaw/224454970685" target="_blank" rel="noopener">이번 달 문호 보기<span class="sr-only"> (새 창)</span> <svg class="ic" aria-hidden="true"><use href="#i-arrow-ur"/></svg></a>
@@ -471,28 +471,66 @@
     </div>
   </div>
 </section>
-<section class="cta-strip" aria-labelledby="cta-title">
-  <div class="container">
-    <div class="cta-strip__card">
-      <div>
-        <h2 id="cta-title">이 변화가 내 케이스에 어떤 영향이 있을까요?</h2>
-        <p>바뀐 규정이 내 상황에 어떤 의미인지 상담에서 확인하세요. 한국에 계셔도 상담할 수 있습니다.</p>
-      </div>
-      <div class="btns">
-        <a class="btn btn--primary btn--lg" href="contact.html#form">상담 예약하기 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="btn btn--kakao btn--lg" href="#" data-toast="카카오톡 ID: hkimlaw16 (실제 사이트에서는 카카오톡 채팅이 열립니다)"><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg>카톡 상담</a>
-        <a class="btn btn--ghost btn--lg" href="tel:+12137036828"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>(213) 703-6828</a>
-      </div>
+<section class="callband" aria-labelledby="cta-title">
+  <div class="container callband__inner">
+    <div>
+      <h2 id="cta-title">이 변화가 내 케이스에 어떤 영향이 있을까요?</h2>
+      <p>바뀐 규정이 내 상황에 어떤 의미인지 상담에서 확인하세요. 한국에 계셔도 상담할 수 있습니다.</p>
+    </div>
+    <div class="callband__actions">
+      <a class="btn btn--light btn--lg" href="contact.html#form">김형걸 변호사 상담 예약 <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="callband__tel" href="tel:+12137036828"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><span><small>바로 전화</small>(213) 703-6828</span></a>
     </div>
   </div>
 </section>
 </main>
-<footer class="site-footer">
+<footer class="site-footer site-footer--b">
   <div class="container">
-    <div class="footer-grid">
+    <div class="footer-grid footer-grid--b">
       <div class="footer-brand">
         <a class="logo" href="index.html" aria-label="김형걸 이민법 변호사 홈"><span class="logo__mark">VK</span><span class="logo__text"><span class="logo__ko">김형걸 이민법 변호사</span><span class="logo__en">Law Offices of Vincent Kim</span></span></a>
-        <p>로스앤젤레스 윌셔에서 20년 동안 이민법 한길. 영주권·비자·시민권·추방재판을 직접 상담합니다.</p>
+        <p>로스앤젤레스 윌셔에서 20년 동안 이민법 한 분야만 다뤄 왔습니다. 복잡한 이민법, 끝까지 직접 챙기겠습니다.</p>
+        <ul class="footer-contact">
+          <li><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span>3600 Wilshire Blvd. Suite 412<br>Los Angeles, CA 90010</span></li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+12137036828">(213) 703-6828</a></li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span>카카오톡 ID hkimlaw16</span></li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:vinkimlaw@gmail.com">vinkimlaw@gmail.com</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">자주 찾는 주제</p>
+        <div class="tagcloud"><a href="news.html?cat=bulletin">영주권 문호</a><a href="practice-green-card.html#t-family">가족초청</a><a href="practice-green-card.html#t-niw">NIW</a><a href="practice-green-card.html#t-eb5">EB-5</a><a href="news.html?q=i-485">I-485</a><a href="column.html?q=i-751">I-751</a><a href="practice-green-card.html#t-reentry">재입국허가서</a><a href="practice-nonimmigrant-visa.html#t-h1b">H-1B</a><a href="practice-nonimmigrant-visa.html#t-e2">E-2</a><a href="news.html?q=opt">OPT</a><a href="news.html?q=esta">ESTA</a><a href="practice-citizenship.html#t-n400">N-400</a><a href="practice-citizenship.html#t-dual">이중국적</a><a href="practice-removal-defense.html#t-court">추방재판</a><a href="practice-removal-defense.html#t-bond">보석·구금</a><a href="column.html?q=waiver">I-601 웨이버</a><a href="practice-removal-defense.html#t-asylum">망명</a><a href="practice-removal-defense.html#t-record">RFE·거절</a><a href="news.html?q=public+charge">공적부조</a><a href="column.html?cat=case">승인 사례</a></div>
+      </div>
+      <div>
+        <p class="footer-title">김형걸 변호사의 온라인 미디어</p>
+        <ul class="footer-links">
+          <li><a href="https://cafe.naver.com/hkimlaw" target="_blank" rel="noopener">네이버 카페 · 미국 비자 미국 이민<span class="sr-only"> (새 창)</span></a></li>
+          <li><a href="https://blog.naver.com/hkimlaw" target="_blank" rel="noopener">네이버 블로그 · 이민법 글 1,500편+<span class="sr-only"> (새 창)</span></a></li>
+          <li><a href="https://blog.naver.com/hkimlaw/224287937161" target="_blank" rel="noopener">KBS America 뉴스 출연<span class="sr-only"> (새 창)</span></a></li>
+          <li><a href="#" data-toast="오픈채팅 링크는 확인 후 연결합니다.">오픈 카카오톡 · 새 글 알림</a></li>
+          <li><a href="#" data-toast="유튜브 채널은 개설 예정입니다.">유튜브 · 1분 이민법 (개설 예정)</a></li>
+          <li><a href="#" data-toast="기고 매체는 확인 후 연결합니다.">언론 기고 칼럼 (확인 필요)</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-title">이민 필수 링크</p>
+        <ul class="footer-links">
+          <li><a href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener">USCIS 케이스 조회</a></li>
+          <li><a href="https://egov.uscis.gov/processing-times/" target="_blank" rel="noopener">USCIS 처리 기간</a></li>
+          <li><a href="https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin.html" target="_blank" rel="noopener">국무부 Visa Bulletin</a></li>
+          <li><a href="https://acis.eoir.justice.gov/en/" target="_blank" rel="noopener">이민법원 케이스 조회</a></li>
+          <li><a href="https://overseas.mofa.go.kr/us-losangeles-ko/index.do" target="_blank" rel="noopener">주LA 대한민국 총영사관</a></li>
+          <li><a href="en.html" lang="en">English</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <div class="footer-legal__row">
+        <nav aria-label="정책">
+          <a href="#" data-toast="시안: 개인정보처리방침 페이지">개인정보처리방침</a>
+          <a href="#" data-toast="시안: 면책 고지 페이지">면책 고지</a>
+          <a href="#" data-toast="시안: 접근성 안내 페이지">접근성 안내</a>
+        </nav>
         <div class="socials">
           <a href="https://cafe.naver.com/hkimlaw" target="_blank" rel="noopener" aria-label="네이버 카페 (새 창)"><svg class="ic" aria-hidden="true"><use href="#i-naver"/></svg></a>
           <a href="#" aria-label="유튜브" data-toast="유튜브 채널은 개설 예정입니다."><svg class="ic" aria-hidden="true"><use href="#i-youtube"/></svg></a>
@@ -501,36 +539,6 @@
           <a href="#" aria-label="페이스북" data-toast="페이스북 페이지는 개설 예정입니다."><svg class="ic" aria-hidden="true"><use href="#i-facebook"/></svg></a>
         </div>
       </div>
-      <div>
-        <p class="footer-title">MENU</p>
-        <ul class="footer-links"><li><a href="about.html">변호사 소개</a></li><li><a href="practice.html">업무분야</a></li><li><a href="news.html">이민법소식</a></li><li><a href="column.html">전문가칼럼</a></li><li><a href="contact.html">상담안내</a></li><li><a href="en.html" lang="en">English</a></li></ul>
-      </div>
-      <div>
-        <p class="footer-title">이민 필수 링크</p>
-        <ul class="footer-links">
-          <li><a href="https://egov.uscis.gov/casestatus/landing.do" target="_blank" rel="noopener">USCIS 케이스 조회</a></li>
-          <li><a href="https://egov.uscis.gov/processing-times/" target="_blank" rel="noopener">USCIS 처리 기간</a></li>
-          <li><a href="https://travel.state.gov/content/travel/en/legal/visa-law0/visa-bulletin.html" target="_blank" rel="noopener">국무부 Visa Bulletin</a></li>
-          <li><a href="https://kr.usembassy.gov/ko/" target="_blank" rel="noopener">주한미국대사관</a></li>
-          <li><a href="https://overseas.mofa.go.kr/us-losangeles-ko/index.do" target="_blank" rel="noopener">주LA 대한민국 총영사관</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="footer-title">CONTACT</p>
-        <ul class="footer-contact">
-          <li><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+12137036828">(213) 703-6828</a></li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-chat"/></svg><span>카카오톡 ID hkimlaw16</span></li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:vinkimlaw@gmail.com">vinkimlaw@gmail.com</a></li>
-          <li><svg class="ic" aria-hidden="true"><use href="#i-pin"/></svg><span>3600 Wilshire Blvd. Suite 412<br>Los Angeles, CA 90010</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-legal">
-      <nav aria-label="정책">
-        <a href="#" data-toast="시안: 개인정보처리방침 페이지">개인정보처리방침</a>
-        <a href="#" data-toast="시안: 면책 고지 페이지">면책 고지</a>
-        <a href="#" data-toast="시안: 접근성 안내 페이지">접근성 안내</a>
-      </nav>
       <p>본 웹사이트의 정보는 일반적인 법률 정보이며 법률 자문이 아닙니다. 웹사이트 이용이나 문의만으로 변호사-의뢰인 관계가 성립하지 않습니다. 게시글은 작성일 기준이며 이후 법령과 정책이 바뀌었을 수 있습니다.</p>
       <p>Law Offices of Vincent Kim · 책임 변호사 Vincent Kim · 3600 Wilshire Blvd. Suite 412, Los Angeles, CA 90010</p>
       <p>© <span data-year>2026</span> Law Offices of Vincent Kim. All rights reserved.</p>
@@ -557,7 +565,11 @@
     <div data-quiz-body></div>
   </div>
 </div>
-<a class="mock-tag" href="../index.html"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg>시안 B · Warm Boutique · 이민법 소식</a>
+<a class="mock-tag" href="../index.html"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg>시안 B · Personal Counsel · 이민법 소식</a>
 <script src="../assets/mockup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="../assets/config.js"></script>
+<script src="../assets/live.js"></script>
 </body>
 </html>

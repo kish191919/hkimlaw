@@ -213,6 +213,7 @@
 
 - **A안 "Wilshire Editorial":** Boundless의 큰 세리프 타이포와 여백 + WR Immigration의 시네마틱 사진 + Fragomen식 소식 모듈. 색은 기존 카페 배너와 이어지는 네이비·골드.
 - **B안 "Warm Boutique":** Elyon Legal의 크림·딥그린·테라코타와 둥근 사진 + Herman식 창업자 카드 + SimVisa식 전환 장치.
+  - 2026-11-20 개편: A와 구성이 거의 같아 **B안 "Personal Counsel"**(변호사 1인 브랜드형)으로 다시 짰다. 색은 유지하고, 구성은 의뢰인이 준 jkparklaw.com, 표현 기법은 kfreemanlawoffice.com에서 가져왔다. 상세: [benchmark-jkpark-kfreeman.md](benchmark-jkpark-kfreeman.md)
 - **두 안 공통:** 대륜식 모바일 하단 고정 상담 바, Alma식 절차 타임라인, 영상·미디어 블록.
 
 ## 7. 검토했지만 제외한 사이트

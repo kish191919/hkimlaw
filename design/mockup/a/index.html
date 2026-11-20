@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="a">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -285,7 +285,7 @@
       </div>
       <div class="news__grid">
         <div>
-          <ol class="alerts">
+          <ol class="alerts" data-live-home="news">
             <li class="alert" data-reveal>
               <a href="#" data-toast="시안: 게시글 상세 화면은 '영주권 카드를 분실했다면' 1종으로 제작했습니다.">
                 <time datetime="2026-11-17">2026.11.17</time>
@@ -327,7 +327,7 @@
             <a class="link-arrow" href="post.html">게시글 화면 예시 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
           </div>
         </div>
-        <aside class="vb-card" data-reveal="fade" aria-label="이달의 영주권 문호">
+        <aside class="vb-card" data-reveal="fade" aria-label="이달의 영주권 문호" data-live-vb>
           <p class="vb-card__month">11<span>월</span></p>
           <p class="eyebrow">이달의 영주권 문호</p>
           <h3>2026년 11월 영주권 문호</h3>
@@ -358,7 +358,7 @@
           <button class="car-btn" type="button" aria-label="다음 칼럼" data-carousel-next><svg class="ic"><use href="#i-arrow"/></svg></button>
         </div>
       </div>
-      <div class="hscroll col-track" data-carousel-track>
+      <div class="hscroll col-track" data-carousel-track data-live-home="columns" data-limit="6">
         <a class="col-card col-card--demo" href="post.html" style="position:relative">
           <span class="demo-flag">상세 화면 예시</span>
           <div class="col-card__art art-guide"><svg class="ic"><use href="#i-doc"/></svg><span class="col-card__kicker">PRACTICAL GUIDE</span></div>
@@ -448,7 +448,7 @@
           <button class="car-btn" type="button" aria-label="다음 영상" data-carousel-next><svg class="ic"><use href="#i-arrow"/></svg></button>
         </div>
       </div>
-      <div class="hscroll shorts-track" data-carousel-track>
+      <div class="hscroll shorts-track" data-carousel-track data-live-home="videos" data-limit="4" data-variant="shorts">
         <a class="short s1" href="#" data-toast="시안: 유튜브 숏츠가 재생됩니다.">
           <span class="short__tag">예시</span><span class="short__big" aria-hidden="true">11월</span>
           <span class="short__play"><svg class="ic"><use href="#i-play"/></svg></span>
@@ -488,7 +488,7 @@
         </div>
         <a class="link-arrow" href="column.html?cat=case" data-reveal data-delay="2">사례 더 보기 <svg class="ic"><use href="#i-arrow"/></svg></a>
       </div>
-      <div class="case-grid">
+      <div class="case-grid" data-live-home="cases">
         <article class="case" data-reveal>
           <div class="case__top"><span class="chip">웨이버</span><span class="case__approved"><svg class="ic"><use href="#i-check"/></svg>APPROVED</span></div>
           <h3>20년 동안 가족을 돌본 아들, I-601 웨이버 승인</h3>
@@ -671,5 +671,9 @@
 
 <a class="mock-tag" href="../index.html"><svg class="ic"><use href="#i-arrow-left"/></svg>시안 A · Wilshire Editorial</a>
 <script src="../assets/mockup.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script src="../assets/config.js"></script>
+<script src="../assets/live.js"></script>
 </body>
 </html>
